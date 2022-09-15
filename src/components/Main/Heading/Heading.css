@@ -1,0 +1,10 @@
+.heading {
+  min-width: 100%;
+  margin: 0;
+  border-bottom: 1px solid #000;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  padding-bottom: 23px;
+  letter-spacing: -0.04em;
+}

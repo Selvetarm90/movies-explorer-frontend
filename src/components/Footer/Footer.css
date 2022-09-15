@@ -1,0 +1,37 @@
+.footer {
+  padding: 80px 70px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+}
+
+.footer__paragraph {
+  margin: 0;
+  width: 100%;
+  color: #A0A0A0;
+  border-bottom: 1px solid #E8E8E8;
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+
+}
+
+.footer__year {
+  margin: 0;
+}
+
+.footer__links {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+}
+
+.footer__link{
+  text-decoration: none;
+  color: #000;
+  margin-left: 20px;
+}
+
+
