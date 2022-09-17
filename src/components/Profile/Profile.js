@@ -5,6 +5,7 @@ export default function Profile() {
   const [isReductOpen, setReductOpen] = useState(false);
   const [name, setName] = useState('Андрей Воробей');
   const [email, setEmail] = useState('andrey@ya.ru');
+  const [errorReduct, setErrorReduct] = useState('')
 
   const handleReduct = () => {
     setReductOpen(!isReductOpen);
@@ -17,6 +18,10 @@ export default function Profile() {
   const handleChangeEmail = (evt) => {
     setEmail(evt.target.value);
   };
+
+  const handleErrorReduct = () => {
+    setErrorReduct('Ошибка!')
+  }
 
   return (
     <main className='profile'>
@@ -44,11 +49,38 @@ export default function Profile() {
           />
         </label>
       </form>
-      <button type='button' className='profile__button' onClick={handleReduct}>
+      <button
+        type='button'
+        className={`profile__button ${
+          isReductOpen ? 'profile__button_none' : ''
+        }`}
+        onClick={handleReduct}
+      >
         Редактировать
       </button>
-      <button type='button' className='profile__button profile__button_red'>
+      <button
+        type='button'
+        className={`profile__button profile__button_logout ${
+          isReductOpen ? 'profile__button_none' : ''
+        }`}
+      >
         Выйти из аккаунта
+      </button>
+      <span
+        className={`profile__error ${
+          !errorReduct ? 'profile__error_none' : ''
+        }`}
+      >
+        {errorReduct}
+      </span>
+      <button
+        type='submit'
+        onClick={handleErrorReduct}
+        className={`profile__button profile__button-save ${
+          !isReductOpen ? 'profile__button_none' : ''
+        } ${errorReduct ? 'profile__button-save_unactive' : ''}`}
+      >
+        Сохранить
       </button>
     </main>
   );
