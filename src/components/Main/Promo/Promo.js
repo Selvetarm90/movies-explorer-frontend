@@ -13,7 +13,7 @@ export default function Promo() {
         </p>
       </div>
       <img className='promo__image' src={web} alt='Вэб' />
-      <a className='promo__more' href='#'>Узнать больше</a>
+      <a className='promo__more' href='#about-project'>Узнать больше</a>
     </section>
   );
 }

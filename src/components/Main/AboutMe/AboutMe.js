@@ -5,7 +5,7 @@ import Heading from '../Heading/Heading';
 export default function AboutMe() {
   return (
     <section className='about-me'>
-      <Heading text='Студент' />
+      <Heading text='Студент' id='about-me' />
       <img className='about-me__photo' src={photo} alt='фото' />
       <div className='about-me__content'>
         <h3 className='about-me__name'>Алексей</h3>
