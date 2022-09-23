@@ -26,6 +26,10 @@ export default function AboutProject() {
         <p className="diagram diagram_first">1 неделя</p>
         <p className="diagram diagram_second">4 недели</p>
       </div>
+      <div className="diagram diagram_sign">
+        <p className="diagram diagram_sign-el diagram_first">Back-end</p>
+        <p className="diagram diagram_sign-el diagram_second">Front-end</p>
+      </div>
     </section>
   );
 }

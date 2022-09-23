@@ -41,9 +41,34 @@
 }
 
 .diagram_first {
-  flex-basis: 20%;
+  flex-basis: 25%;
   background-color: #2be080;
 }
 .diagram_second {
-  flex-basis: 80%;
+  flex-basis: 75%;
+}
+
+.diagram_sign {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .about {
+    padding: 90px 50px;
+  }
+
+  .description__paragraph {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .diagram_sign {
+    display: flex;
+    color: #A0A0A0;
+    padding-top: 5px;
+  }
+
+  .diagram_sign-el {
+    background-color: #fff;
+  }
 }
