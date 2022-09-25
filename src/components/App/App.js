@@ -15,7 +15,7 @@ function App() {
     <div className='App'>
       <Switch>
         <Route exact path='/'>
-          <Header darkBackground={true} loggedIn={false} />
+          <Header darkBackground={true} loggedIn={true} path={''} />
           <Main />
           <Footer />
         </Route>

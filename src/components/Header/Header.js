@@ -3,7 +3,6 @@ import { Link, Route, Switch } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
 
 export default function Header(props) {
-
   function HeaderNavigation() {
     if (props.loggedIn) {
       if (props.path) {
@@ -18,10 +17,6 @@ export default function Header(props) {
     <header className={`header ${props.darkBackground ? 'header_dark' : ''}`}>
       <Link className='header__logo' to='/' />
       <Switch>
-        <Route exact path='/'>
-          <HeaderNavigation />
-        </Route>
-
         <Route path={`/${props.path}`}>
           <HeaderNavigation />
         </Route>

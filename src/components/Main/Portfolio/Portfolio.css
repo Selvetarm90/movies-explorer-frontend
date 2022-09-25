@@ -1,5 +1,5 @@
 .portfolio {
-  padding: 0 70px 135px 70px;
+  padding: 0 70px 135px;
 }
 
 .portfolio__heading {
@@ -36,4 +36,14 @@
 
 .portfolio__link-name {
   margin: 0;
+}
+
+@media (max-width: 780px) {
+  .portfolio {
+    padding: 0 50px 90px;
+  }
+
+  .portfolio__link {
+    font-size: 28px;
+  }
 }

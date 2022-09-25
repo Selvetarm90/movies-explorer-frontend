@@ -26,10 +26,10 @@
 
 @media (max-width: 860px) {
   .header {
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
   .header__logo{
-    left: 50px;
+    left: 30px;
   }
 }
