@@ -1,10 +1,10 @@
 import './NavigatePopup.css';
 import { Link, NavLink } from 'react-router-dom';
 
-export default function NavigatePopup() {
+export default function NavigatePopup(props) {
   return (
-    <div className='popup'>
-      <button type='button' className='popup__button-close'/>
+    <div className={`popup ${props.isOpen ? 'popup_opened' : ''}`}>
+      <button type='button' className='popup__button-close' onClick={props.onClose}/>
       <nav className='popup__navigate'>
         <NavLink className='popup__link' activeClassName='popup__link_active' to='/'>Главная</NavLink>
         <NavLink className='popup__link' activeClassName='popup__link_active' to='movies'>Фильмы</NavLink>
