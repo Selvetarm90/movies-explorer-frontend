@@ -87,6 +87,7 @@
   border: none;
   padding: 0;
   display: none;
+  cursor: pointer;
 }
 
 .navigation__burger_color_white {

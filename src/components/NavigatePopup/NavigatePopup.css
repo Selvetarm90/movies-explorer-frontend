@@ -20,19 +20,19 @@
   z-index: 1;
 }
 
-
 .popup_opened {
   display: flex;
   animation: smooth-open 0.4s;
 }
 
 .popup__navigate {
-  height: 100%;
+  height: 100vh;
   display: flex;
-  text-align: center;
   flex-direction: column;
   background-color: #fff;
-  width: calc((520 / 768) * 100%);
+  align-items: center;
+  width: 520px;
+  gap: 28px;
 }
 
 .popup__button-close {
@@ -46,4 +46,41 @@
   position: absolute;
   top: 22px;
   right: 22px;
+  cursor: pointer;
+}
+
+
+.popup__link {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.popup__link_active {
+  border-bottom: 2px solid #000;
+}
+
+.popup__link_el_account {
+  margin-top: calc(100vh - 431px);
+  margin-bottom: 90px;
+  font-size: 14px;
+  line-height: 16px;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  width: 100px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup__link:first-child {
+  margin-top: 160px;
+}
+
+.popup__link:not(:last-child) {
+  padding-bottom: 4px;
 }
