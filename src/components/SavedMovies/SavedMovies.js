@@ -7,6 +7,9 @@ export default function SavedMovies () {
     <main className='saved-movies'>
       <SearchForm />
       <MoviesCardList buttonSavedCard={true} />
+      <button type='button' className='movies__button-more'>
+        Ещё
+      </button>
     </main>
   )
 }

@@ -10,3 +10,10 @@
   font-size: 12px;
   line-height: 15px;
 }
+
+.movies__button-more {
+  margin-left: 30px;
+  margin-right: 30px;
+  width: calc(100% - 60px);
+
+}
