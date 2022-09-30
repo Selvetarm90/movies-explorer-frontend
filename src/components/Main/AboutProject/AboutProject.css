@@ -64,11 +64,36 @@
 
   .diagram_sign {
     display: flex;
-    color: #A0A0A0;
-    padding-top: 5px;
+    color: #a0a0a0;
+    margin-top: 5px;
   }
 
   .diagram_sign-el {
     background-color: #fff;
+  }
+}
+
+@media (max-width: 400px) {
+  .about {
+    padding: 70px 18px;
+  }
+  .description {
+    width: 100%;
+    padding-top: 60px;
+    padding-bottom: 0;
+  }
+
+  .description__heading {
+    font-size: 18px;
+    line-height: 22px;
+    padding-bottom: 16px;
+  }
+
+  .description__paragraph {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .description__paragraph_last {
+    padding-bottom: 60px;
   }
 }

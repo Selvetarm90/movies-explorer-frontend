@@ -1,7 +1,7 @@
 .promo {
   background-color: #073042;
   color: #fff;
-  padding: 75px 70px 75px 70px;
+  padding: 75px 70px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -29,7 +29,7 @@
   font-size: 13px;
   line-height: 16px;
   opacity: 0.5;
-  width: calc((310/1280) * 100vw);
+  width: calc((310 / 1280) * 100vw);
 }
 
 .promo__image {
@@ -59,7 +59,6 @@
   .promo {
     justify-content: center;
     padding: 140px 50px 0;
-
   }
   .promo__image {
     display: block;
@@ -86,5 +85,39 @@
 
   .promo__more {
     margin: 92px auto 76px;
+  }
+}
+
+@media (max-width: 400px) {
+  .promo {
+    padding-top: 70px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__image {
+    width: 210px;
+    height: 206px;
+  }
+
+  .promo__text {
+    width: 300px;
+  }
+
+  .promo__heading {
+    width: 300px;
+    font-size: 30px;
+    line-height: 38px;
+    letter-spacing: -0.04em;
+    margin: 44px auto 24px;
+  }
+
+  .promo__paragraph {
+    width: 260px;
+  }
+
+  .promo__more {
+    margin-top: 80px;
+    margin-bottom: 30px;
   }
 }

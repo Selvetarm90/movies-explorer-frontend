@@ -17,7 +17,7 @@ export default function AboutProject() {
         <h2 className='description__heading'>
           На выполнение диплома ушло 5 недель
         </h2>
-        <p className='description__paragraph'>
+        <p className='description__paragraph description__paragraph_last'>
           У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
           соблюдать, чтобы успешно защититься.
         </p>

@@ -102,3 +102,12 @@
 .profile__error_none {
   opacity: 0;
 }
+
+@media (max-width: 800px) {
+  .profile {
+    margin-top: 236px;
+  }
+  .profile__heading {
+    padding-bottom: 100px;
+  }
+}

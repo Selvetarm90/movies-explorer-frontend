@@ -95,3 +95,9 @@
   cursor: pointer;
   text-decoration: none;
 }
+
+@media (max-width: 800px) {
+  .register {
+    margin-top: 232px;
+  }
+}

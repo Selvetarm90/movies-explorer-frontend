@@ -32,7 +32,7 @@
   background-color: #fff;
   align-items: center;
   width: 520px;
-  gap: 28px;
+  gap: 22px;
 }
 
 .popup__button-close {
@@ -56,7 +56,7 @@
   line-height: 22px;
   color: #000;
   text-decoration: none;
-  box-sizing: border-box;
+
 }
 
 .popup__link_active {

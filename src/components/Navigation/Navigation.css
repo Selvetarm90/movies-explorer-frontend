@@ -103,3 +103,9 @@
     display: block;
   }
 }
+
+@media (max-width: 400px) {
+  .navigation__link_el_signup {
+    padding-right: 14px;
+  }
+}
