@@ -25,12 +25,20 @@
   font-size: 30px;
   line-height: 50px;
   letter-spacing: -0.04em;
-  border-bottom: 1px solid #E8E8E8;
+  border-bottom: 1px solid #e8e8e8;
   padding-bottom: 20px;
   padding-top: 20px;
 }
 
-.portfolio__link:last-child{
+.portfolio__link-arrow {
+  width: 18px;
+  height: 28px;
+  background-image: url(../../../images/link-arrow.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.portfolio__link:last-child {
   border-bottom: none;
 }
 
@@ -45,5 +53,25 @@
 
   .portfolio__link {
     font-size: 28px;
+  }
+}
+
+@media (max-width: 400px) {
+  .portfolio {
+    padding: 0 14px 70px;
+  }
+
+  .portfolio__heading {
+    font-size: 14px;
+    padding-bottom: 20px;
+  }
+
+  .portfolio__link {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .portfolio__link-arrow {
+    background-image: url(../../../images/link-arrow-mini.svg);
   }
 }

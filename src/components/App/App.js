@@ -25,7 +25,7 @@ function App() {
         <Route exact path='/'>
           <Header
             darkBackground={true}
-            loggedIn={false}
+            loggedIn={true}
             path={''}
             onNavigate={handleNavigatePopupOpen}
           />

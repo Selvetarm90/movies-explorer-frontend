@@ -8,15 +8,15 @@ export default function Portfolio() {
       <ul className='portfolio__links'>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Статичный сайт</p>
-          <a href='#'><img src={arrow} alt='Ссылка' /></a>
+          <a href='#' className='portfolio__link-arrow'/>
         </li>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Адаптивный сайт</p>
-          <a href='#'><img src={arrow} alt='Ссылка' /></a>
+          <a href='#' className='portfolio__link-arrow'/>
         </li>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Одностраничное приложение</p>
-          <a href='#'><img src={arrow} alt='Ссылка' /></a>
+          <a href='#' className='portfolio__link-arrow'/>
         </li>
       </ul>
     </section>

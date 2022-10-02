@@ -72,3 +72,30 @@
     line-height: 15px;
   }
 }
+
+@media (max-width: 550px) {
+  .techs {
+    padding: 60px 18px 70px;
+  }
+
+  .techs__heading {
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    text-shadow: none;
+    padding-top: 60px;
+  }
+
+  .techs__paragraph {
+    font-size: 11px;
+    line-height: 16px;
+    width: 100%;
+  }
+
+  .techs__list {
+    flex-wrap: wrap;
+    width: 178px;
+    justify-content: flex-start;
+    padding-top: 50px;
+  }
+}

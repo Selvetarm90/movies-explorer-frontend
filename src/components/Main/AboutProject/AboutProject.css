@@ -96,4 +96,21 @@
   .description__paragraph_last {
     padding-bottom: 60px;
   }
+
+  .diagram {
+    font-size: 11px;
+    line-height: 13px;
+  }
+
+  .diagram_sign {
+    margin-top: 0;
+  }
+
+  .diagram_first {
+    flex-basis: 35%;
+
+  }
+  .diagram_second {
+    flex-basis: 65%;
+  }
 }
