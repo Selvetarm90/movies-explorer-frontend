@@ -41,6 +41,7 @@
 
 .form__input:disabled {
   background-color: #fff;
+  color: #000
 }
 
 .form__placeholder {
@@ -109,5 +110,23 @@
   }
   .profile__heading {
     padding-bottom: 100px;
+  }
+}
+
+@media (max-width: 450px) {
+  .profile {
+    margin: 70px 30px 40px;
+    width: calc(100vw - 60px)
+  }
+
+  .profile__heading {
+    padding-bottom: 80px;
+  }
+  .form {
+    margin-bottom: 379px;
+  }
+
+  .profile__error {
+    margin-bottom: -146px;
   }
 }

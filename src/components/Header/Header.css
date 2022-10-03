@@ -40,4 +40,8 @@
     padding-left: 14px;
     padding-right: 14px;
   }
+
+  .header__logo {
+    left: 14px;
+  }
 }

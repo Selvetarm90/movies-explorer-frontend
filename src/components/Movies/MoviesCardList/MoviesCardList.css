@@ -28,3 +28,13 @@
     margin-bottom: 30px;
   }
 }
+
+@media (max-width: 730px) {
+  .cards {
+    grid-template-columns: repeat(1, 300px);
+    gap: 16px;
+    max-width: 300px;
+    margin-top: 40px;
+  }
+
+}

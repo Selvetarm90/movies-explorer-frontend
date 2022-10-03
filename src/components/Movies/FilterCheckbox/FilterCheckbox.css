@@ -33,3 +33,9 @@
   background-image: url(../../../images/checkbox-active.svg);
 }
 
+@media (max-width: 400px) {
+  .filter-checkbox__button + .filter-checkbox__checkbox-name {
+    font-size: 11px;
+  }
+}
+
