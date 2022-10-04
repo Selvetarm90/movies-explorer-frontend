@@ -7,6 +7,11 @@
 .navigation__link {
   text-decoration: none;
   color: #000;
+  transition: .3s;
+}
+
+.navigation__link:hover {
+  opacity: .7;
 }
 
 .navigation__link_el_signup {
@@ -88,6 +93,11 @@
   padding: 0;
   display: none;
   cursor: pointer;
+  transition: .3s;
+}
+
+.navigation__burger:hover {
+  opacity: .7;
 }
 
 .navigation__burger_color_white {

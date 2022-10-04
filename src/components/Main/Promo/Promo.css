@@ -53,6 +53,11 @@
   color: #fff;
   margin-right: 50vw;
   margin-top: 84px;
+  transition: .3s;
+}
+
+.promo__more:hover {
+  opacity: .7;
 }
 
 @media (max-width: 860px) {

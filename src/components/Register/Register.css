@@ -35,6 +35,10 @@
   box-sizing: border-box;
 }
 
+.form-register__input::placeholder {
+  opacity: 0;
+}
+
 .form-register__label {
   display: block;
   font-weight: 400;
@@ -99,5 +103,41 @@
 @media (max-width: 800px) {
   .register {
     margin-top: 232px;
+  }
+}
+@media (max-width: 500px) {
+  .register {
+    margin: 56px auto 30px;
+    width: calc(100vw - 60px);
+  }
+
+  .register__logo {
+    margin: auto;
+  }
+
+  .register__heading {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 80px;
+  }
+
+  .form-register__label {
+    margin-bottom: 5px;
+  }
+  .register__button-save {
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 79px;
+  }
+
+  .register__paragraph {
+    font-size: 12px;
+    line-height: 15px;
+    padding-left: calc((100vw - 60px - 188px) / 2);
+  }
+
+  .register__link {
+    font-size: 12px;
+    line-height: 15px;
   }
 }

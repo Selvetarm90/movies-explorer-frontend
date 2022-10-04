@@ -55,6 +55,11 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
+  transition: .3s;
+}
+
+.about-me__link:hover {
+  opacity: .7;
 }
 
 @media (max-width: 800px) {

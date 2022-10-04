@@ -9,6 +9,12 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 15px;
+  transition: .3s;
+}
+
+.movies__button-more:hover {
+  cursor: pointer;
+  opacity: .8;
 }
 
 @media (max-width: 800px) {

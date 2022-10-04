@@ -1,4 +1,5 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
+import Preloader from '../../Preloader/Preloader';
 import './MoviesCardList.css';
 
 export default function MoviesCardList(props) {
@@ -13,6 +14,7 @@ export default function MoviesCardList(props) {
       <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
       <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
       <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
+      <Preloader />
     </section>
   )
 }

@@ -25,7 +25,7 @@ function App() {
         <Route exact path='/'>
           <Header
             darkBackground={true}
-            loggedIn={true}
+            loggedIn={true}            //Для разавторизации loggedIn установить в false
             path={''}
             onNavigate={handleNavigatePopupOpen}
           />

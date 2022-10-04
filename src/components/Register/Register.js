@@ -5,7 +5,7 @@ export default function Register() {
     return (
       <label className='form-register__label'>
         {props.name}
-        <input type={props.type} className='form-register__input'></input>
+        <input type={props.type} className='form-register__input' placeholder={props.placeholder}></input>
         <span className='form-register__error'>{props.error}</span>
       </label>
     );
@@ -15,9 +15,9 @@ export default function Register() {
       <Link to='/' className='register__logo' />
       <h2 className='register__heading'>Добро пожаловать!</h2>
       <form className='form-register'>
-        <FormInput name='Имя' type='text' error='невалидное имя.' />
-        <FormInput name='E-mail' type='email' error='невалидная почта.' />
-        <FormInput name='Пароль' type='password' error='невалидный пароль.' />
+        <FormInput name='Имя' type='text' placeholder='Имя' error='невалидное имя.' />
+        <FormInput name='E-mail' type='email' placeholder='E-mail' error='невалидная почта.' />
+        <FormInput name='Пароль' type='password' placeholder='Пароль' error='невалидный пароль.' />
         <span className='profile__submit-error'></span>
         <button type='submit' className='register__button-save'>Зарегистрироваться</button>
         <p className='register__paragraph'>Уже зарегестрированы?</p>

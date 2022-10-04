@@ -36,6 +36,11 @@
   background-image: url(../../../images/link-arrow.svg);
   background-repeat: no-repeat;
   background-position: center;
+  transition: .3s;
+}
+
+.portfolio__link-arrow:hover {
+  opacity: .7;
 }
 
 .portfolio__link:last-child {

@@ -1,5 +1,4 @@
 import './Portfolio.css';
-import arrow from '../../../images/link-arrow.svg';
 
 export default function Portfolio() {
   return (
@@ -8,15 +7,30 @@ export default function Portfolio() {
       <ul className='portfolio__links'>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Статичный сайт</p>
-          <a href='#' className='portfolio__link-arrow'/>
+          <a
+            href='https://github.com/Selvetarm90/how-to-learn'
+            target='_blank'
+            rel='noreferrer'
+            className='portfolio__link-arrow'
+          />
         </li>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Адаптивный сайт</p>
-          <a href='#' className='portfolio__link-arrow'/>
+          <a
+            href='https://github.com/Selvetarm90/russian-travel'
+            target='_blank'
+            rel='noreferrer'
+            className='portfolio__link-arrow'
+          />
         </li>
         <li className='portfolio__link'>
           <p className='portfolio__link-name'>Одностраничное приложение</p>
-          <a href='#' className='portfolio__link-arrow'/>
+          <a
+            href='https://github.com/Selvetarm90/react-mesto-api-full'
+            target='_blank'
+            rel='noreferrer'
+            className='portfolio__link-arrow'
+          />
         </li>
       </ul>
     </section>

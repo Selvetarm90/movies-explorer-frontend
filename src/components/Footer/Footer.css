@@ -34,6 +34,11 @@
   text-decoration: none;
   color: #000;
   margin-left: 20px;
+  transition: .3;
+}
+
+.footer__link:hover {
+  opacity: .7;
 }
 
 @media (max-width: 400px) {
