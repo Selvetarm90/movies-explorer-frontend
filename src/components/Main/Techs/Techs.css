@@ -47,7 +47,7 @@
   line-height: 17px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 840px) {
   .techs {
     padding: 90px 50px;
   }
@@ -58,6 +58,8 @@
 
   .techs__heading {
     padding: 80px 0 22px;
+    font-weight: 400;
+    text-shadow: none;
   }
 
   .techs__paragraph {
@@ -73,16 +75,21 @@
   }
 }
 
+@media (max-width: 750px) {
+  .techs__list {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 550px) {
   .techs {
     padding: 60px 18px 70px;
+    background-color: #fff;
   }
 
   .techs__heading {
-    font-weight: 400;
     font-size: 30px;
     line-height: 36px;
-    text-shadow: none;
     padding-top: 60px;
   }
 
@@ -93,7 +100,6 @@
   }
 
   .techs__list {
-    flex-wrap: wrap;
     width: 178px;
     justify-content: flex-start;
     padding-top: 50px;

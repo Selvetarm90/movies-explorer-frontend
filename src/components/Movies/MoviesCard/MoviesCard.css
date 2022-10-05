@@ -50,6 +50,12 @@
   line-height: 11px;
   margin-bottom: 18px;
   box-sizing: border-box;
+  transition: opacity .3s;
+}
+
+.card__button:hover {
+  opacity: .8;
+  cursor: pointer;
 }
 
 .card__button_saved {

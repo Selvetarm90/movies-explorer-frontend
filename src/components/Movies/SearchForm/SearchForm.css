@@ -41,6 +41,11 @@
   border-radius: 40px;
   margin-left: 10px;
   cursor: pointer;
+  transition: opacity .3s;
+}
+
+.search-form__button:hover {
+  opacity: .8;
 }
 
 @media (max-width: 800px) {
