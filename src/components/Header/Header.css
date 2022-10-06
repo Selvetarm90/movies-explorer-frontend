@@ -1,0 +1,47 @@
+.header {
+  position: relative;
+  padding: 18px 70px;
+  height: 74px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.header_dark {
+  background-color: #073042;
+}
+
+.header__logo {
+  position: absolute;
+  background-image: url(../../images/logo.svg);
+  width: 38px;
+  height: 38px;
+  left: 70px;
+  top: 18px;
+}
+
+@media (max-width: 860px) {
+  .header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .header__logo{
+    left: 30px;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    font-size: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .header__logo {
+    left: 14px;
+  }
+}

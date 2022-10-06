@@ -1,0 +1,136 @@
+.about-me {
+  padding: 110px 70px 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.about-me__photo {
+  width: 270px;
+  height: 327px;
+  object-fit: cover;
+  object-position: left;
+  border-radius: 10px;
+  margin-top: 66px;
+  order: 1;
+}
+
+.about-me__content {
+  width: calc((600 / 1140) * 100%);
+  display: flex;
+  flex-direction: column;
+  margin-top: 70px;
+}
+
+.about-me__name {
+  margin: 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+  padding-bottom: 20px;
+}
+
+.about-me__profession {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  padding-bottom: 26px;
+}
+
+.about-me__description {
+  margin: 0;
+  padding-bottom: 100px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.about-me__link {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+  display: inline;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  transition: .3s;
+}
+
+.about-me__link:hover {
+  opacity: .7;
+}
+
+@media (max-width: 800px) {
+  .about-me {
+    padding: 66px 50px 91px;
+  }
+
+  .about-me__content {
+    width: calc((368 / 668) * 100%);
+  }
+
+  .about-me__photo {
+    width: 255px;
+    height: 307px;
+  }
+
+  .about-me__name {
+    font-size: 40px;
+    line-height: 40px;
+    padding-bottom: 16px;
+  }
+
+  .about-me__profession {
+    font-size: 12px;
+    line-height: 18px;
+    padding-bottom: 20px;
+  }
+
+  .about-me__description {
+    font-size: 12px;
+    line-height: 18px;
+    padding-bottom: 87px;
+  }
+}
+
+@media (max-width: 680px) {
+  .about-me {
+    justify-content: center;
+    padding: 70px 14px;
+  }
+  .about-me__photo {
+    margin-top: 60px;
+    order: 0;
+  }
+
+  .about-me__content {
+    width: 100%;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .about-me__photo {
+    width: 292px;
+    height: 352px;
+  }
+
+  .about-me__name {
+    font-size: 30px;
+    line-height: 36px;
+    padding-bottom: 20px;
+  }
+
+  .about-me__profession {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-me__description {
+    font-size: 11px;
+    line-height: 16px;
+    padding-bottom: 40px;
+  }
+}

@@ -1,0 +1,128 @@
+.promo {
+  background-color: #073042;
+  color: #fff;
+  padding: 75px 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  max-width: 1280px;
+}
+
+.promo__text {
+  width: 50%;
+}
+
+.promo__heading {
+  margin: 0;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  width: 100%;
+  margin-bottom: 36px;
+}
+
+.promo__paragraph {
+  margin: 0;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  opacity: 0.5;
+  width: calc((310 / 1280) * 100vw);
+}
+
+.promo__image {
+  max-width: 310px;
+  max-height: 304px;
+}
+
+.promo__more {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 3px;
+  padding: 0 20px 0 20px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  max-width: 129px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  margin-right: 50vw;
+  margin-top: 84px;
+  transition: .3s;
+}
+
+.promo__more:hover {
+  opacity: .7;
+}
+
+@media (max-width: 860px) {
+  .promo {
+    justify-content: center;
+    padding: 140px 50px 0;
+  }
+  .promo__image {
+    display: block;
+    width: 100%;
+    order: -1;
+  }
+
+  .promo__text {
+    width: calc((680 / 768) * 100vw);
+    text-align: center;
+  }
+
+  .promo__heading {
+    margin-top: 50px;
+    margin-bottom: 22px;
+    font-size: 40px;
+    line-height: 50px;
+  }
+
+  .promo__paragraph {
+    width: calc((260 / 768) * 100vw);
+    margin: auto;
+  }
+
+  .promo__more {
+    margin: 92px auto 76px;
+  }
+}
+
+@media (max-width: 400px) {
+  .promo {
+    padding-top: 70px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .promo__image {
+    width: 210px;
+    height: 206px;
+  }
+
+  .promo__text {
+    width: 300px;
+  }
+
+  .promo__heading {
+    width: 300px;
+    font-size: 30px;
+    line-height: 38px;
+    letter-spacing: -0.04em;
+    margin: 44px auto 24px;
+  }
+
+  .promo__paragraph {
+    width: 260px;
+  }
+
+  .promo__more {
+    margin-top: 80px;
+    margin-bottom: 30px;
+  }
+}
