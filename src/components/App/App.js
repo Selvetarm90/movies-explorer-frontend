@@ -10,10 +10,22 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
 import NavigatePopup from '../NavigatePopup/NavigatePopup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import * as moviesApi from '../../utils/MoviesApi';
 
 function App() {
   const [isNavigatePopupOpen, setNavigatePopup] = useState(false);
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    moviesApi
+      .getMovies()
+      .then((movies) => {
+        setMovies(movies);
+      })
+      .catch((err) => console.log(err));
+
+  }, []);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
@@ -25,7 +37,7 @@ function App() {
         <Route exact path='/'>
           <Header
             darkBackground={true}
-            loggedIn={true}            //Для разавторизации loggedIn установить в false
+            loggedIn={true} //Для разавторизации loggedIn установить в false
             path={''}
             onNavigate={handleNavigatePopupOpen}
           />
@@ -39,7 +51,7 @@ function App() {
             path={'movies'}
             onNavigate={handleNavigatePopupOpen}
           />
-          <Movies />
+          <Movies movies={movies} />
           <Footer />
         </Route>
 

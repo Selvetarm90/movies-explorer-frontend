@@ -3,18 +3,17 @@ import Preloader from '../../Preloader/Preloader';
 import './MoviesCardList.css';
 
 export default function MoviesCardList(props) {
-  return(
+  return (
+
     <section className='cards'>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
-      <MoviesCard buttonSavedCard={props.buttonSavedCard || false}/>
+      {props.movies.map((item) => (
+        <MoviesCard
+          movie={item}
+          key={item.id}
+          buttonSavedCard={props.buttonSavedCard || false}
+        />
+      ))}
       <Preloader />
     </section>
-  )
+  );
 }
