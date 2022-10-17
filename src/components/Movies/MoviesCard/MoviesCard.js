@@ -4,7 +4,7 @@ export default function MoviesCard(props) {
   return (
     <article className='card'>
       <h2 className='card__name'>{props.movie.nameRU}</h2>
-      <p className='card__duration'>{props.movie.duration}</p>
+      <p className='card__duration'>{`${props.movie.duration} минут`}</p>
       <img
         className='card__image'
         alt={props.movie.nameRU}

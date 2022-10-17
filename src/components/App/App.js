@@ -24,7 +24,6 @@ function App() {
         setMovies(movies);
       })
       .catch((err) => console.log(err));
-
   }, []);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
