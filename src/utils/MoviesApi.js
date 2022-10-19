@@ -4,8 +4,8 @@ const checkResponse = (res) => {
   return res.ok ? res.json() : Promise.reject(res.status);
 };
 
-export const  getMovies = async () => {
-  return await fetch(BASE_URL, {
+export const getMovies = () => {
+  return fetch(BASE_URL, {
     method: 'GET',
   }).then(checkResponse);
 };
