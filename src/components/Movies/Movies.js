@@ -28,9 +28,17 @@ export default function Movies({ movies }) {
     setMoviesList(moviesList.concat(addedMovies));
   };
 
+  const handleSearchMovies = (text) => {
+   return movies.map((item) => {
+      if (!item.nameEN.toLowerCase().includes(text)) {
+        item.remove();
+      }
+    });
+  };
+
   return (
     <main className='movies'>
-      <SearchForm />
+      <SearchForm searchMovies={handleSearchMovies} />
       <MoviesCardList moviesList={moviesList} />
       <button
         type='button'
