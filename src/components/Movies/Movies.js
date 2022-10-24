@@ -5,6 +5,7 @@ import SearchForm from './SearchForm/SearchForm';
 
 export default function Movies({ movies }) {
   const [moviesList, setMoviesList] = useState([]);
+  const [viewMoviesList, setViewMoviesList] = useState([]);
 
   useEffect(() => {
     startMoviesList(movies);
@@ -13,33 +14,42 @@ export default function Movies({ movies }) {
   const startMoviesList = (movies) => {
     const viewMovies = [];
     if (movies.length > 0) {
+      if (movies.length <= 12) {
+        setViewMoviesList(movies)
+        return
+      }
       for (let i = 0; i <= 11; i++) {
         viewMovies.push(movies[i]);
       }
-      setMoviesList(viewMovies);
+      setViewMoviesList(viewMovies);
     }
   };
 
   const handleClick = () => {
     const addedMovies = [];
-    for (let i = moviesList.length; i <= moviesList.length + 2; i++) {
-      addedMovies.push(movies[i]);
+    for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
+      if (moviesList.length > viewMoviesList.length) {
+        addedMovies.push(moviesList[i]);
+      }
     }
-    setMoviesList(moviesList.concat(addedMovies));
+    setViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
   const handleSearchMovies = (text) => {
-   return movies.map((item) => {
-      if (!item.nameEN.toLowerCase().includes(text)) {
-        item.remove();
-      }
-    });
+    setMoviesList([]);
+    setViewMoviesList([]);
+    setMoviesList(
+      movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
+    );
+    startMoviesList(moviesList);
+
+    console.log(moviesList);
   };
 
   return (
     <main className='movies'>
       <SearchForm searchMovies={handleSearchMovies} />
-      <MoviesCardList moviesList={moviesList} />
+      <MoviesCardList moviesList={viewMoviesList} />
       <button
         type='button'
         className='movies__button-more'
