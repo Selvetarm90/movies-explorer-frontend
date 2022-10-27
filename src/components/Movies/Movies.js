@@ -11,12 +11,22 @@ export default function Movies({ movies }) {
     startMoviesList(movies);
   }, [movies]);
 
+  useEffect(() => {
+    startMoviesList(moviesList);
+  }, [moviesList]);
+
+  // useEffect(() => {
+  //   startMoviesList(moviesList);
+  // }, [viewMoviesList]);
+
   const startMoviesList = (movies) => {
+    setMoviesList(movies)
+    console.log(movies);
     const viewMovies = [];
     if (movies.length > 0) {
       if (movies.length <= 12) {
-        setViewMoviesList(movies)
-        return
+        setViewMoviesList(movies);
+        return;
       }
       for (let i = 0; i <= 11; i++) {
         viewMovies.push(movies[i]);
@@ -28,10 +38,14 @@ export default function Movies({ movies }) {
   const handleClick = () => {
     const addedMovies = [];
     for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
+      console.log(moviesList.length);
+      console.log(viewMoviesList.length);
       if (moviesList.length > viewMoviesList.length) {
         addedMovies.push(moviesList[i]);
       }
     }
+    console.log(addedMovies);
+    console.log(viewMoviesList);
     setViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
@@ -41,9 +55,8 @@ export default function Movies({ movies }) {
     setMoviesList(
       movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
     );
-    startMoviesList(moviesList);
-
     console.log(moviesList);
+    // startMoviesList(moviesList);
   };
 
   return (
