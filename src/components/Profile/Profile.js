@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import './Profile.css';
 
-export default function Profile() {
+export default function Profile({ handleLogout }) {
   const [isReductOpen, setReductOpen] = useState(false);
   const [name, setName] = useState('Андрей Воробей');
   const [email, setEmail] = useState('andrey@ya.ru');
-  const [errorReduct, setErrorReduct] = useState('')
+  const [errorReduct, setErrorReduct] = useState('');
 
   const handleReduct = () => {
     setReductOpen(!isReductOpen);
@@ -20,8 +20,12 @@ export default function Profile() {
   };
 
   const handleErrorReduct = () => {
-    setErrorReduct('Ошибка!')
-  }
+    setErrorReduct('Ошибка!');
+  };
+
+  const handleClickLogout = () => {
+    handleLogout();
+  };
 
   return (
     <main className='profile'>
@@ -60,6 +64,7 @@ export default function Profile() {
       </button>
       <button
         type='button'
+        onClick={handleClickLogout}
         className={`profile__button profile__button_logout ${
           isReductOpen ? 'profile__button_none' : ''
         }`}

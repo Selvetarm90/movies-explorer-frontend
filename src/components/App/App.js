@@ -37,24 +37,15 @@ function App() {
           setCurrentUser(userInfo);
         })
         .catch((err) => console.log(err));
+
+      mainApi
+        .getMovies(token)
+        .then((movies) => {
+          setSavedMovies(movies);
+        })
+        .catch((err) => console.log(err));
     }
   }, [loggedIn]);
-
-  useEffect(() => {
-    moviesApi
-      .getMovies()
-      .then((movies) => {
-        setMovies(movies);
-      })
-      .catch((err) => console.log(err));
-
-    mainApi
-      .getMovies()
-      .then((movies) => {
-        setSavedMovies(movies);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -69,6 +60,25 @@ function App() {
           }
         })
         .catch((err) => console.log(err));
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    moviesApi
+      .getMovies()
+      .then((movies) => {
+        setMovies(movies);
+      })
+      .catch((err) => console.log(err));
+    if (token) {
+      console.log(token);
+      // mainApi
+      //   .getMovies(token)
+      //   .then((movies) => {
+      //     setSavedMovies(movies);
+      //   })
+      //   .catch((err) => console.log(err));
     }
   }, []);
 
@@ -119,6 +129,7 @@ function App() {
     setToken('');
     setEmail('');
     setLoggedIn(false);
+    history.push('/');
   };
 
   return (
@@ -162,7 +173,7 @@ function App() {
               path={'profile'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <Profile />
+            <Profile handleLogout={handleLogout} />
           </Route>
 
           <Route path='/signin'>

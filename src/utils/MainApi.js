@@ -5,6 +5,7 @@ const checkResponse = (res) => {
 };
 
 export const getMovies = (token) => {
+  console.log(token)
   return fetch(`${BASE_URL}/movies`, {
     method: "GET",
     headers: {
