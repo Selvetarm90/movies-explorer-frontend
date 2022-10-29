@@ -2,11 +2,11 @@ import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import SearchForm from '../Movies/SearchForm/SearchForm';
 import './SavedMovies.css';
 
-export default function SavedMovies () {
+export default function SavedMovies ({movies}) {
   return(
     <main className='saved-movies'>
       <SearchForm />
-      <MoviesCardList buttonSavedCard={true} />
+      <MoviesCardList buttonSavedCard={true}  moviesList={movies}/>
       <button type='button' className='movies__button-more'>
         Ещё
       </button>

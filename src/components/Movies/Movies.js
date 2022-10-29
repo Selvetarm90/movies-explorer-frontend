@@ -3,11 +3,15 @@ import { useEffect, useState } from 'react';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import SearchForm from './SearchForm/SearchForm';
 
-export default function Movies({ movies }) {
+export default function Movies({ handleSaveMovie, movies }) {
   const [moviesList, setMoviesList] = useState([]);
   const [viewMoviesList, setViewMoviesList] = useState([]);
+  const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
+  const [checkboxState, setCheckboxState] = useState(false);
+  const [movieName, setMovieName] = useState('');
 
   useEffect(() => {
+    setMoviesList(movies);
     startMoviesList(movies);
   }, [movies]);
 
@@ -15,12 +19,18 @@ export default function Movies({ movies }) {
     startMoviesList(moviesList);
   }, [moviesList]);
 
-  // useEffect(() => {
-  //   startMoviesList(moviesList);
-  // }, [viewMoviesList]);
+  useEffect(() => {
+    if (viewMoviesList.length === moviesList.length) {
+      setbuttonMoreVisible(false);
+    } else setbuttonMoreVisible(true);
+  }, [viewMoviesList, moviesList]);
+
+  useEffect(() => {
+    handleSearchMovies(movieName);
+  }, [checkboxState]);
 
   const startMoviesList = (movies) => {
-    setMoviesList(movies)
+    //setMoviesList(movies)
     console.log(movies);
     const viewMovies = [];
     if (movies.length > 0) {
@@ -35,12 +45,12 @@ export default function Movies({ movies }) {
     }
   };
 
-  const handleClick = () => {
+  const handleClickButtonMore = () => {
     const addedMovies = [];
     for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
       console.log(moviesList.length);
       console.log(viewMoviesList.length);
-      if (moviesList.length > viewMoviesList.length) {
+      if (moviesList[i]) {
         addedMovies.push(moviesList[i]);
       }
     }
@@ -52,21 +62,62 @@ export default function Movies({ movies }) {
   const handleSearchMovies = (text) => {
     setMoviesList([]);
     setViewMoviesList([]);
-    setMoviesList(
-      movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
-    );
+    if (checkboxState) {
+      setMoviesList(moviesList.filter((item) => item.duration < 40));
+    } else {
+      setMoviesList(
+        movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
+      );
+    }
+
     console.log(moviesList);
     // startMoviesList(moviesList);
   };
 
+  // const searchMoviesWithCheckbox = () => {
+  //   if (checkboxState) {
+
+  //     setMoviesList(moviesList.filter((item) => item.duration < 40));
+  //   } else
+  //     setMoviesList(
+  //       movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
+  //     );
+  // };
+
+  const handleChangeCheckbox = (evt) => {
+    setCheckboxState(evt.target.checked);
+    console.log(checkboxState);
+  };
+
+  const handleChangeMovieName = (evt) => {
+    setMovieName(evt.target.value);
+  };
+
+  const handleSubmitSearchForm = (evt) => {
+    evt.preventDefault();
+    handleSearchMovies(movieName.toLowerCase());
+    console.log(movieName);
+  };
+
   return (
     <main className='movies'>
-      <SearchForm searchMovies={handleSearchMovies} />
-      <MoviesCardList moviesList={viewMoviesList} />
+      <SearchForm
+        // searchMovies={handleSearchMovies}
+        handleChangeCheckbox={handleChangeCheckbox}
+        handleChangeMovieName={handleChangeMovieName}
+        handleSubmitSearchForm={handleSubmitSearchForm}
+        movieName={movieName}
+      />
+      <MoviesCardList
+        handleSaveMovie={handleSaveMovie}
+        moviesList={viewMoviesList}
+      />
       <button
         type='button'
-        className='movies__button-more'
-        onClick={handleClick}
+        className={`movies__button-more ${
+          !buttonMoreVisible ? 'movies__button-more_unactive' : ''
+        }`}
+        onClick={handleClickButtonMore}
       >
         Ещё
       </button>

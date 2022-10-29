@@ -2,19 +2,25 @@ import { useState } from 'react';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
-export default function SearchForm({ searchMovies }) {
-  const [movieName, setMovieName] = useState('');
-  const handleChangeMovieName = (evt) => {
-    setMovieName(evt.target.value);
-  };
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    searchMovies(movieName.toLowerCase());
-    console.log(movieName)
-  };
+export default function SearchForm({
+  searchMovies,
+  handleChangeCheckbox,
+  handleChangeMovieName,
+  handleSubmitSearchForm,
+  movieName
+}) {
+  // const [movieName, setMovieName] = useState('');
+  // const handleChangeMovieName = (evt) => {
+  //   setMovieName(evt.target.value);
+  // };
+  // const handleSubmitSearchForm = (evt) => {
+  //   evt.preventDefault();
+  //   searchMovies(movieName.toLowerCase());
+  //   console.log(movieName)
+  // };
 
   return (
-    <form className='search-form' onSubmit={handleSubmit}>
+    <form className='search-form' onSubmit={handleSubmitSearchForm}>
       <input
         type='text'
         className='search-form__input'
@@ -26,7 +32,7 @@ export default function SearchForm({ searchMovies }) {
       <button className='search-form__button' type='submit'>
         Найти
       </button>
-      <FilterCheckbox />
+      <FilterCheckbox handleChangeCheckbox={handleChangeCheckbox} />
     </form>
   );
 }
