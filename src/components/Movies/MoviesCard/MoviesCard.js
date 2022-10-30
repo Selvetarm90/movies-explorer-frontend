@@ -15,12 +15,12 @@ export default function MoviesCard({ handleSaveMovie, ...props }) {
       image: `https://api.nomoreparties.co${props.movie.image.url}`,
       trailerLink: props.movie.trailerLink,
       thumbnail: `https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`,
-      owner: currentUser._id,
+      // owner: currentUser._id,
       movieId: props.movie.id,
       nameRU: props.movie.nameRU,
-      nameEN: props.movie.nameEN
-    })
-  }
+      nameEN: props.movie.nameEN,
+    });
+  };
   return (
     <article className='card'>
       <h2 className='card__name'>{props.movie.nameRU}</h2>
@@ -28,7 +28,11 @@ export default function MoviesCard({ handleSaveMovie, ...props }) {
       <img
         className='card__image'
         alt={props.movie.nameRU}
-        src={`https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`}
+        src={
+          props.movie.owner
+            ? props.movie.thumbnail
+            : `https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`
+        }
       />
       <button
         type='button'

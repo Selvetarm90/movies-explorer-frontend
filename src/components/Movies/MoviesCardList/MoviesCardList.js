@@ -9,7 +9,7 @@ export default function MoviesCardList({ handleSaveMovie, ...props }) {
         <MoviesCard
           handleSaveMovie={handleSaveMovie}
           movie={item}
-          key={item.id}
+          key={item.owner ? item._id : item.id}
           buttonSavedCard={props.buttonSavedCard || false}
         />
       ));

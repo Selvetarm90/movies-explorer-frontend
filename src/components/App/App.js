@@ -25,6 +25,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [preSavedMovies, setPreSavedMovies] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -35,13 +36,7 @@ function App() {
         .getUserInfo(token)
         .then((userInfo) => {
           setCurrentUser(userInfo);
-        })
-        .catch((err) => console.log(err));
-
-      mainApi
-        .getMovies(token)
-        .then((movies) => {
-          setSavedMovies(movies);
+          console.log(userInfo);
         })
         .catch((err) => console.log(err));
     }
@@ -56,7 +51,6 @@ function App() {
           if (data) {
             setLoggedIn(true);
             setEmail(data.email);
-            history.push('/');
           }
         })
         .catch((err) => console.log(err));
@@ -64,30 +58,40 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
     moviesApi
       .getMovies()
       .then((movies) => {
         setMovies(movies);
       })
       .catch((err) => console.log(err));
-    if (token) {
-      console.log(token);
-      // mainApi
-      //   .getMovies(token)
-      //   .then((movies) => {
-      //     setSavedMovies(movies);
-      //   })
-      //   .catch((err) => console.log(err));
-    }
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    mainApi
+      .getMovies(token)
+      .then((movies) => {
+        console.log(currentUser._id);
+        const mySavedMovies = movies.filter(
+          (movie) => movie.owner.toString() === currentUser._id.toString(),
+        );
+        setSavedMovies(mySavedMovies);
+      })
+      .catch((err) => console.log(err));
+  }, [currentUser, preSavedMovies]);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
   const closeAllPopups = () => setNavigatePopup(false);
 
   const handleSaveMovie = (data) => {
-    console.log(data);
+    mainApi
+      .addMovie(data, token)
+      .then((movie) => {
+        setPreSavedMovies((preSavedMovies) => preSavedMovies.concat(movie));
+        console.log(preSavedMovies);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleRegister = (name, email, password) => {
