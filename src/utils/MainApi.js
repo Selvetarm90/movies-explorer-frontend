@@ -35,3 +35,13 @@ export const addMovie = (data, token) => {
     body: JSON.stringify(data)
   }).then(checkResponse);
 }
+
+export const delMovie = (id, token) => {
+  return fetch(`${BASE_URL}/movies/${id}`, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+  }).then(checkResponse);
+}

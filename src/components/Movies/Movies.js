@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import SearchForm from './SearchForm/SearchForm';
 
-export default function Movies({ handleSaveMovie, movies }) {
+export default function Movies({ handleSaveMovie, buttonSavedStatus, movies }) {
   const [moviesList, setMoviesList] = useState([]);
   const [viewMoviesList, setViewMoviesList] = useState([]);
   const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
@@ -110,6 +110,7 @@ export default function Movies({ handleSaveMovie, movies }) {
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}
+        buttonSavedStatus={buttonSavedStatus}
         moviesList={viewMoviesList}
       />
       <button

@@ -25,6 +25,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
   const [preSavedMovies, setPreSavedMovies] = useState([]);
   const history = useHistory();
 
@@ -32,8 +33,8 @@ function App() {
     if (loggedIn) {
       const token = localStorage.getItem('jwt');
       setToken(token);
-      mainApi
-        .getUserInfo(token)
+      auth
+        .checkToken(token)
         .then((userInfo) => {
           setCurrentUser(userInfo);
           console.log(userInfo);
@@ -67,17 +68,19 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    mainApi
-      .getMovies(token)
-      .then((movies) => {
-        console.log(currentUser._id);
-        const mySavedMovies = movies.filter(
-          (movie) => movie.owner.toString() === currentUser._id.toString(),
-        );
-        setSavedMovies(mySavedMovies);
-      })
-      .catch((err) => console.log(err));
+    if (currentUser._id) {
+      const token = localStorage.getItem('jwt');
+      mainApi
+        .getMovies(token)
+        .then((movies) => {
+          console.log(currentUser._id);
+          const mySavedMovies = movies.filter(
+            (movie) => movie.owner.toString() === currentUser._id.toString(),
+          );
+          setSavedMovies(mySavedMovies);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [currentUser, preSavedMovies]);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
@@ -88,8 +91,25 @@ function App() {
     mainApi
       .addMovie(data, token)
       .then((movie) => {
-        setPreSavedMovies((preSavedMovies) => preSavedMovies.concat(movie));
+        setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
+        console.log(buttonSavedStatus);
+        setPreSavedMovies([]);
         console.log(preSavedMovies);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeleteMovie = (id) => {
+    mainApi
+      .delMovie(id, token)
+      .then((movie) => {
+        console.log(movie.data.movieId)
+        setButtonSavedStatus(
+          buttonSavedStatus.filter((item) => movie.data.movieId !== item),
+        );
+        // setButtonSavedStatus(false);
+        console.log(movie);
+        setPreSavedMovies([]);
       })
       .catch((err) => console.log(err));
   };
@@ -157,7 +177,11 @@ function App() {
               path={'movies'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <Movies handleSaveMovie={handleSaveMovie} movies={movies} />
+            <Movies
+              handleSaveMovie={handleSaveMovie}
+              movies={movies}
+              buttonSavedStatus={buttonSavedStatus}
+            />
             <Footer />
           </Route>
 
@@ -167,7 +191,10 @@ function App() {
               path={'saved-movies'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <SavedMovies movies={savedMovies} />
+            <SavedMovies
+              movies={savedMovies}
+              handleDeleteMovie={handleDeleteMovie}
+            />
             <Footer />
           </Route>
 
