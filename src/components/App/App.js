@@ -91,7 +91,12 @@ function App() {
     mainApi
       .addMovie(data, token)
       .then((movie) => {
-        setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
+        //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
+        setMovies((movies) =>
+          movies.map((m) =>
+            m.id === data.movieId ? { buttonStatusSave: true, ...m } : m,
+          ),
+        );
         console.log(buttonSavedStatus);
         setPreSavedMovies([]);
         console.log(preSavedMovies);
@@ -99,15 +104,23 @@ function App() {
       .catch((err) => console.log(err));
   };
 
-  const handleDeleteMovie = (id) => {
+  const handleDeleteMovie = (id, movieId) => {
+    console.log(movieId);
     mainApi
       .delMovie(id, token)
       .then((movie) => {
-        console.log(movie.data.movieId)
-        setButtonSavedStatus(
-          buttonSavedStatus.filter((item) => movie.data.movieId !== item),
+        console.log(movie.data.movieId);
+        setMovies((movies) =>
+          movies.map((m) => {
+            // m.id === movieId ? Reflect.deleteProperty(m, 'buttonStatusSave') : m
+            if (m.id === movieId) {
+              const obj = { buttonStatusSave: true, ...m };
+              return obj.m;
+            }
+            return m;
+          }),
         );
-        // setButtonSavedStatus(false);
+
         console.log(movie);
         setPreSavedMovies([]);
       })

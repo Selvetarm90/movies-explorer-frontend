@@ -11,6 +11,7 @@ export default function Movies({ handleSaveMovie, buttonSavedStatus, movies }) {
   const [movieName, setMovieName] = useState('');
 
   useEffect(() => {
+    console.log(movies)
     setMoviesList(movies);
     startMoviesList(movies);
   }, [movies]);
