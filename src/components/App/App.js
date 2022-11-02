@@ -30,13 +30,25 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    moviesApi
+      .getMovies()
+      .then((movies) => {
+        setMovies(movies);
+        console.log(movies);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
     if (loggedIn) {
+      console.log(currentUser);
       const token = localStorage.getItem('jwt');
       setToken(token);
       auth
         .checkToken(token)
         .then((userInfo) => {
           setCurrentUser(userInfo);
+          setMovies(movies);
           console.log(userInfo);
         })
         .catch((err) => console.log(err));
@@ -44,6 +56,8 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
+    setMovies(movies);
+    console.log(currentUser);
     const token = localStorage.getItem('jwt');
     if (token) {
       auth
@@ -59,29 +73,38 @@ function App() {
   }, []);
 
   useEffect(() => {
-    moviesApi
-      .getMovies()
-      .then((movies) => {
-        setMovies(movies);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {
+    setMovies(movies);
+    console.log(currentUser);
     if (currentUser._id) {
       const token = localStorage.getItem('jwt');
       mainApi
         .getMovies(token)
         .then((movies) => {
-          console.log(currentUser._id);
+          console.log(movies);
           const mySavedMovies = movies.filter(
             (movie) => movie.owner.toString() === currentUser._id.toString(),
           );
           setSavedMovies(mySavedMovies);
+
         })
         .catch((err) => console.log(err));
     }
   }, [currentUser, preSavedMovies]);
+
+  useEffect(() => {
+    console.log(movies)
+    console.log(savedMovies)
+    setMovies((movies) =>
+            movies.map((m) => {
+              const changingMovies = savedMovies.some(
+                (sm) => m.id === sm.movieId,
+              );
+              if (changingMovies) {
+                return { buttonStatusSave: true, ...m };
+              } else return m;
+            }),
+          );
+  }, [savedMovies]);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
@@ -112,10 +135,8 @@ function App() {
         console.log(movie.data.movieId);
         setMovies((movies) =>
           movies.map((m) => {
-            // m.id === movieId ? Reflect.deleteProperty(m, 'buttonStatusSave') : m
             if (m.id === movieId) {
-              const obj = { buttonStatusSave: true, ...m };
-              return obj.m;
+              delete m.buttonStatusSave;
             }
             return m;
           }),

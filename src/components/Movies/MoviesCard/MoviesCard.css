@@ -66,6 +66,11 @@
   background-image: url(../../../images/card-button-saved.svg);
 }
 
+.card__button_saved:hover {
+  opacity: 1;
+  cursor: default;
+}
+
 .card__button_del-movie {
   background-image: url(../../../images/del-card.svg);
   background-repeat: no-repeat;
