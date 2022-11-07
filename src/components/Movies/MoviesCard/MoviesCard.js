@@ -12,7 +12,7 @@ export default function MoviesCard({
 
   const handleSave = () => {
     if (!props.movie.buttonStatusSave) {
-      console.log(buttonSavedStatus);
+
       handleSaveMovie({
         country: props.movie.country,
         director: props.movie.director,
@@ -31,7 +31,7 @@ export default function MoviesCard({
   };
 
   const handleDelete = () => {
-    console.log(buttonSavedStatus);
+
     handleDeleteMovie(props.movie._id, props.movie.movieId);
   };
 

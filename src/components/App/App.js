@@ -18,7 +18,9 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function App() {
   const [isNavigatePopupOpen, setNavigatePopup] = useState(false);
+  const [initialCards, setInitialCards] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [findedMovies, setFindedMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -33,22 +35,20 @@ function App() {
     moviesApi
       .getMovies()
       .then((movies) => {
-        setMovies(movies);
-        console.log(movies);
+        setInitialCards(movies);
       })
       .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     if (loggedIn) {
-      console.log(currentUser);
       const token = localStorage.getItem('jwt');
       setToken(token);
       auth
         .checkToken(token)
         .then((userInfo) => {
           setCurrentUser(userInfo);
-          setMovies(movies);
+          //setMovies(initialCards);
           console.log(userInfo);
         })
         .catch((err) => console.log(err));
@@ -56,8 +56,6 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    setMovies(movies);
-    console.log(currentUser);
     const token = localStorage.getItem('jwt');
     if (token) {
       auth
@@ -73,8 +71,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setMovies(movies);
-    console.log(currentUser);
     if (currentUser._id) {
       const token = localStorage.getItem('jwt');
       mainApi
@@ -85,26 +81,31 @@ function App() {
             (movie) => movie.owner.toString() === currentUser._id.toString(),
           );
           setSavedMovies(mySavedMovies);
-
         })
         .catch((err) => console.log(err));
     }
   }, [currentUser, preSavedMovies]);
 
   useEffect(() => {
-    console.log(movies)
-    console.log(savedMovies)
-    setMovies((movies) =>
-            movies.map((m) => {
-              const changingMovies = savedMovies.some(
-                (sm) => m.id === sm.movieId,
-              );
-              if (changingMovies) {
-                return { buttonStatusSave: true, ...m };
-              } else return m;
-            }),
-          );
-  }, [savedMovies]);
+    console.log(savedMovies);
+    if (initialCards.length) {
+      console.log(initialCards);
+      if (!savedMovies.length) {
+        setMovies(initialCards);
+      } else {
+        setMovies(() =>
+          initialCards.map((m) => {
+            const changingMovies = savedMovies.some(
+              (sm) => m.id === sm.movieId,
+            );
+            if (changingMovies) {
+              return { buttonStatusSave: true, ...m };
+            } else return m;
+          }),
+        );
+      }
+    }
+  }, [savedMovies, initialCards]);
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
@@ -117,22 +118,30 @@ function App() {
         //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
         setMovies((movies) =>
           movies.map((m) =>
-            m.id === data.movieId ? { buttonStatusSave: true, ...m } : m,
+            m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
           ),
         );
-        console.log(buttonSavedStatus);
+        // console.log(buttonSavedStatus);
         setPreSavedMovies([]);
-        console.log(preSavedMovies);
       })
       .catch((err) => console.log(err));
   };
 
+  const handleSearchMovies = (text, checkboxState) => {
+    setFindedMovies([]);
+    if (checkboxState) {
+      setFindedMovies(findedMovies.filter((item) => item.duration < 40));
+    } else {
+      setFindedMovies(
+        movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
+      );
+    }
+  };
+
   const handleDeleteMovie = (id, movieId) => {
-    console.log(movieId);
     mainApi
       .delMovie(id, token)
       .then((movie) => {
-        console.log(movie.data.movieId);
         setMovies((movies) =>
           movies.map((m) => {
             if (m.id === movieId) {
@@ -154,7 +163,7 @@ function App() {
       .then((data) => {
         if (data) {
           setErrorMessage('');
-          console.log(data);
+
           history.push('/signin');
         }
       })
@@ -184,6 +193,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('movie-name');
     setToken('');
     setEmail('');
     setLoggedIn(false);
@@ -213,8 +223,10 @@ function App() {
             />
             <Movies
               handleSaveMovie={handleSaveMovie}
+              handleSearchMovies={handleSearchMovies}
               movies={movies}
-              buttonSavedStatus={buttonSavedStatus}
+              findedMovies={findedMovies}
+              // buttonSavedStatus={buttonSavedStatus}
             />
             <Footer />
           </Route>
