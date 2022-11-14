@@ -27,7 +27,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
+  // const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
   const [preSavedMovies, setPreSavedMovies] = useState([]);
   const history = useHistory();
 
@@ -39,21 +39,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  useEffect(() => {
-    if (loggedIn) {
-      const token = localStorage.getItem('jwt');
-      setToken(token);
-      auth
-        .checkToken(token)
-        .then((userInfo) => {
-          setCurrentUser(userInfo);
-          //setMovies(initialCards);
-          console.log(userInfo);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [loggedIn]);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -71,6 +56,24 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (loggedIn) {
+      localStorage.removeItem('movie-name');
+      localStorage.removeItem('view-movies');
+      const token = localStorage.getItem('jwt');
+      setToken(token);
+      auth
+        .checkToken(token)
+        .then((userInfo) => {
+          setCurrentUser(userInfo);
+          //setMovies(initialCards);
+          console.log(userInfo);
+        })
+        .catch((err) => console.log(err));
+    } else {
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
     if (currentUser._id) {
       const token = localStorage.getItem('jwt');
       mainApi
@@ -84,7 +87,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [currentUser, preSavedMovies]);
+  }, [currentUser]);
 
   useEffect(() => {
     console.log(savedMovies);
@@ -111,18 +114,42 @@ function App() {
 
   const closeAllPopups = () => setNavigatePopup(false);
 
-  const handleSaveMovie = (data) => {
+  // const changeSaveButtonStatus = (movie) => {
+  //   return movies.map((m) =>
+  //     m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
+  //   );
+  // };
+
+  // const handleSaveMovie = (data) => {
+  //   mainApi
+  //     .addMovie(data, token)
+  //     .then((movie) => {
+  //       console.log(movie)
+  //       //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
+  //       //Нужно сохранить в сторэйдж фильмы после сохранения фильма!!
+  //       // localStorage.setItem(
+  //       //   'view-movies',
+  //       //   JSON.stringify(changeSaveButtonStatus(movie)),
+  //       // );
+  //       // console.log(JSON.parse(localStorage.getItem('view-movies')));
+  //       return movie
+
+  //       setMovies(() => changeSaveButtonStatus(movie));
+  //       // console.log(buttonSavedStatus);
+  //       setPreSavedMovies([]);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+  const addInSavedMovies = (movie) => {
     mainApi
-      .addMovie(data, token)
-      .then((movie) => {
-        //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
-        setMovies((movies) =>
-          movies.map((m) =>
-            m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
-          ),
+      .getMovies(token)
+      .then((movies) => {
+        console.log(movies);
+        const mySavedMovies = movies.filter(
+          (movie) => movie.owner.toString() === currentUser._id.toString(),
         );
-        // console.log(buttonSavedStatus);
-        setPreSavedMovies([]);
+        setSavedMovies(mySavedMovies);
       })
       .catch((err) => console.log(err));
   };
@@ -138,18 +165,46 @@ function App() {
     }
   };
 
+  const handleDeleteButtonStatusLocal = (movieId) => {
+    const viewMovies = JSON.parse(localStorage.getItem('view-movies'));
+    console.log(viewMovies);
+    return viewMovies.map((m) => {
+      if (m.id === movieId) {
+        delete m.buttonStatusSave;
+      }
+      return m;
+    });
+  };
+
+  const handleDeleteButtonStatus = (movieId) => {
+    return movies.map((m) => {
+      if (m.id === movieId) {
+        delete m.buttonStatusSave;
+      }
+      return m;
+    });
+  };
+
   const handleDeleteMovie = (id, movieId) => {
     mainApi
       .delMovie(id, token)
       .then((movie) => {
-        setMovies((movies) =>
-          movies.map((m) => {
-            if (m.id === movieId) {
-              delete m.buttonStatusSave;
-            }
-            return m;
-          }),
+        mainApi
+          .getMovies(token)
+          .then((movies) => {
+            console.log(movies);
+            const mySavedMovies = movies.filter(
+              (movie) => movie.owner.toString() === currentUser._id.toString(),
+            );
+            setSavedMovies(mySavedMovies);
+          })
+          .catch((err) => console.log(err));
+        localStorage.setItem(
+          'view-movies',
+          JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
         );
+        console.log(JSON.parse(localStorage.getItem('view-movies')));
+        setMovies(() => handleDeleteButtonStatus(movieId));
 
         console.log(movie);
         setPreSavedMovies([]);
@@ -222,8 +277,8 @@ function App() {
               onNavigate={handleNavigatePopupOpen}
             />
             <Movies
-              handleSaveMovie={handleSaveMovie}
               handleSearchMovies={handleSearchMovies}
+              addInSavedMovies={addInSavedMovies}
               movies={movies}
               findedMovies={findedMovies}
               // buttonSavedStatus={buttonSavedStatus}
