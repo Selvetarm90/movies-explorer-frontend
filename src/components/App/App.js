@@ -159,9 +159,11 @@ function App() {
     if (checkboxState) {
       setFindedMovies(findedMovies.filter((item) => item.duration < 40));
     } else {
-      setFindedMovies(
-        movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
-      );
+      setFindedMovies({
+        movies: movies.filter((item) =>
+          item.nameRU.toLowerCase().includes(text),
+        ),
+      });
     }
   };
 

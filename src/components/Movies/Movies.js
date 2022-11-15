@@ -33,7 +33,7 @@ export default function Movies({
   // }, [movies]);
 
   useEffect(() => {
-    if (movies.length) {
+    if (movies.length && !findedMovies.movies) {
       const savedMovieName = localStorage.getItem('movie-name');
       const savedViewMoviesList = JSON.parse(
         localStorage.getItem('view-movies'),
@@ -57,11 +57,12 @@ export default function Movies({
     }
   }, [movies]);
 
-  // useEffect(() => {
-  //   if (true) {
-  //     startMoviesList(movies, findedMovies);
-  //   }
-  // }, [findedMovies]);
+  useEffect(() => {
+    console.log(findedMovies.movies)
+    if (findedMovies.movies) {
+      startMoviesList(movies, findedMovies);
+    }
+  }, [findedMovies]);
 
   useEffect(() => {
     if (viewMoviesList.length === movies.length) {
@@ -84,6 +85,7 @@ export default function Movies({
   // }, [movies]);
 
   const startMoviesList = (movies, findedMovies) => {
+
     //setMoviesList(movies)
     const viewMovies = [];
     const savedMovieName = localStorage.getItem('movie-name');
@@ -104,16 +106,16 @@ export default function Movies({
       }
     }
 
-    if (findedMovies.length <= 12 && findedMovies.length) {
-      localStorage.setItem('view-movies', JSON.stringify(findedMovies));
-      setViewMoviesList(findedMovies);
+    if (findedMovies.movies.length <= 12 && findedMovies.movies.length) {
+      localStorage.setItem('view-movies', JSON.stringify(findedMovies.movies));
+      setViewMoviesList(findedMovies.movies);
       return;
     }
 
-    if (findedMovies.length) {
+    if (findedMovies.movies.length) {
       console.log('найденные фильмы');
       for (let i = 0; i <= 11; i++) {
-        viewMovies.push(findedMovies[i]);
+        viewMovies.push(findedMovies.movies[i]);
       }
       setViewMoviesList(viewMovies);
       localStorage.setItem(
@@ -122,7 +124,7 @@ export default function Movies({
      );
       return;
     }
-    if (!findedMovies.length) {
+    if (!findedMovies.movies.length) {
       console.log('нету!!');
     }
 
@@ -131,7 +133,7 @@ export default function Movies({
 
   const handleClickButtonMore = () => {
     const addedMovies = [];
-    const handleMovies = findedMovies.length ? findedMovies : movies;
+    const handleMovies = findedMovies.movies ? findedMovies.movies : movies;
 
     for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
       console.log(viewMoviesList.length);
@@ -211,8 +213,7 @@ export default function Movies({
       .addMovie(data, token)
       .then((movie) => {
         console.log(movie);
-        //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
-        //Нужно сохранить в сторэйдж фильмы после сохранения фильма!!
+
         localStorage.setItem(
           'view-movies',
           JSON.stringify(changeSaveButtonStatus(movie)),
