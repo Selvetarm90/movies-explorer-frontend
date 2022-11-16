@@ -155,9 +155,25 @@ function App() {
   };
 
   const handleSearchMovies = (text, checkboxState) => {
-    setFindedMovies([]);
+    console.log(findedMovies);
+
+    localStorage.removeItem('view-movies');
     if (checkboxState) {
-      setFindedMovies(findedMovies.filter((item) => item.duration < 40));
+      console.log(findedMovies)
+      if (findedMovies?.movies) {
+        setFindedMovies({
+          movies: findedMovies.movies.filter((item) => item.duration < 40),
+        });
+      }
+      if (!findedMovies?.movies) {
+        setFindedMovies({
+          movies: movies.filter((item) => item.duration < 40),
+        });
+      }
+
+      // console.log({
+      //   movies: findedMovies.filter((item) => item.duration < 40),
+      // });
     } else {
       setFindedMovies({
         movies: movies.filter((item) =>

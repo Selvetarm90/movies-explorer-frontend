@@ -5,7 +5,6 @@ import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 export default function MoviesCard({
   handleSaveMovie,
   handleDeleteMovie,
-  buttonSavedStatus,
   ...props
 }) {
   const currentUser = useContext(CurrentUserContext);

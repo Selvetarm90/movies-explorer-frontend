@@ -14,23 +14,8 @@ export default function Movies({
   const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
   const [checkboxState, setCheckboxState] = useState(false);
   const [movieName, setMovieName] = useState('');
-  const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
 
-  // const findedMovies = [];
 
-  // useEffect(() => {
-  //   console.log(movies)
-  //   setMoviesList(movies);
-  //   startMoviesList(movies);
-  // }, [movies]);
-
-  // useEffect(() => {
-  //   const savedMovieName = localStorage.getItem('movie-name');
-  //   console.log(savedMovieName)
-  //   if (savedMovieName) {
-  //     handleSearchMovies(movieName.toLowerCase(), checkboxState);
-  //   }
-  // }, [movies]);
 
   useEffect(() => {
     if (movies.length && !findedMovies.movies) {
@@ -38,55 +23,63 @@ export default function Movies({
       const savedViewMoviesList = JSON.parse(
         localStorage.getItem('view-movies'),
       );
-      //localStorage.removeItem('view-movies');
       console.log(savedMovieName);
       console.log(savedViewMoviesList);
       if (savedMovieName) {
         handleSearchMovies(savedMovieName.toLowerCase(), checkboxState);
         return;
       }
-      if (savedViewMoviesList) {
+      if (savedViewMoviesList?.length) {
         setViewMoviesList(savedViewMoviesList);
         return;
       }
       if (movies.length) {
         console.log(movies);
-        startMoviesList(movies, findedMovies);
+        startMoviesList(movies, findedMovies.movies);
         console.log(findedMovies);
       }
     }
   }, [movies]);
 
   useEffect(() => {
-    console.log(findedMovies.movies)
+    if (checkboxState) {
+      const savedMovieName = localStorage.getItem('movie-name');
+      console.log(movieName)
+      console.log(savedMovieName)
+      handleSearchMovies(movieName || savedMovieName, checkboxState);
+    }
+    else{
+      startMoviesList(movies, findedMovies.movies)
+    }
+  }, [checkboxState]);
+
+  useEffect(() => {
+    console.log(findedMovies.movies);
+    const savedViewMoviesList = JSON.parse(
+      localStorage.getItem('view-movies'),
+    );
+    if (savedViewMoviesList?.length) {
+      setViewMoviesList(savedViewMoviesList);
+      return;
+    }
     if (findedMovies.movies) {
-      startMoviesList(movies, findedMovies);
+      startMoviesList(movies, findedMovies.movies);
     }
   }, [findedMovies]);
 
   useEffect(() => {
-    if (viewMoviesList.length === movies.length) {
+    const moviesList = findedMovies.movies ? findedMovies.movies : [];
+    if (
+      viewMoviesList.length === movies.length ||
+      viewMoviesList.length === moviesList.length
+    ) {
       setbuttonMoreVisible(false);
     } else setbuttonMoreVisible(true);
   }, [viewMoviesList]);
 
-  useEffect(() => {
-    if (checkboxState) {
-      handleSearchMovies(movieName);
-    }
-  }, [checkboxState, movieName]);
 
-  // useEffect(() => {
-  //   const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
-  //   console.log(savedViewMoviesList);
-  //   if (savedViewMoviesList) {
-  //     setViewMoviesList(savedViewMoviesList);
-  //   }
-  // }, [movies]);
 
   const startMoviesList = (movies, findedMovies) => {
-
-    //setMoviesList(movies)
     const viewMovies = [];
     const savedMovieName = localStorage.getItem('movie-name');
 
@@ -96,36 +89,36 @@ export default function Movies({
         setViewMoviesList(movies);
         return;
       }
-      if (movies.length) {
-        for (let i = 0; i <= 11; i++) {
-          viewMovies.push(movies[i]);
-        }
-        setViewMoviesList(viewMovies);
-        localStorage.setItem('view-movies', JSON.stringify(viewMovies));
-        return;
-      }
+
     }
 
-    if (findedMovies.movies.length <= 12 && findedMovies.movies.length) {
-      localStorage.setItem('view-movies', JSON.stringify(findedMovies.movies));
-      setViewMoviesList(findedMovies.movies);
+    if (findedMovies?.length && findedMovies.length <= 12  ) {
+      localStorage.setItem('view-movies', JSON.stringify(findedMovies));
+      setViewMoviesList(findedMovies);
       return;
     }
 
-    if (findedMovies.movies.length) {
+    if (findedMovies?.length) {
       console.log('найденные фильмы');
       for (let i = 0; i <= 11; i++) {
-        viewMovies.push(findedMovies.movies[i]);
+        viewMovies.push(findedMovies[i]);
       }
       setViewMoviesList(viewMovies);
-      localStorage.setItem(
-        'view-movies',
-       JSON.stringify(viewMovies),
-     );
+      localStorage.setItem('view-movies', JSON.stringify(viewMovies));
       return;
     }
-    if (!findedMovies.movies.length) {
+    if (findedMovies && !findedMovies?.length) {
       console.log('нету!!');
+      return
+    }
+
+    if (movies.length) {
+      for (let i = 0; i <= 11; i++) {
+        viewMovies.push(movies[i]);
+      }
+      setViewMoviesList(viewMovies);
+      localStorage.setItem('view-movies', JSON.stringify(viewMovies));
+      return;
     }
 
     console.log(viewMovies);
@@ -151,38 +144,10 @@ export default function Movies({
     setViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
-  // const handleSearchMovies = (text) => {
-  //   setMoviesList([]);
-  //   setViewMoviesList([]);
-  //   if (checkboxState) {
-  //     setMoviesList(
-  //       moviesList.filter(
-  //         (item) =>
-  //           item.duration < 40 && item.nameRU.toLowerCase().includes(text),
-  //       ),
-  //     );
-  //   } else {
-  //     setMoviesList(
-  //       movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
-  //     );
-  //   }
-
-  //   console.log(moviesList);
-  //   // startMoviesList(moviesList);
-  // };
-
-  // const searchMoviesWithCheckbox = () => {
-  //   if (checkboxState) {
-
-  //     setMoviesList(moviesList.filter((item) => item.duration < 40));
-  //   } else
-  //     setMoviesList(
-  //       movies.filter((item) => item.nameRU.toLowerCase().includes(text)),
-  //     );
-  // };
-
   const handleChangeCheckbox = (evt) => {
     setCheckboxState(evt.target.checked);
+    localStorage.setItem('checkbox', evt.target.checked);
+
     console.log(checkboxState);
   };
 
@@ -192,6 +157,7 @@ export default function Movies({
 
   const handleSubmitSearchForm = (evt) => {
     evt.preventDefault();
+   // localStorage.removeItem('view-movies');
     // setViewMoviesList([]);
     handleSearchMovies(movieName.toLowerCase(), checkboxState);
     localStorage.setItem('movie-name', movieName);
@@ -202,10 +168,6 @@ export default function Movies({
       m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
     );
   };
-
-  // const addInSavedMovies = (movie) => {
-  //   handleAddInSavedMovies(movie)
-  // }
 
   const handleSaveMovie = (data) => {
     const token = localStorage.getItem('jwt');
@@ -222,8 +184,6 @@ export default function Movies({
 
         setViewMoviesList(() => changeSaveButtonStatus(movie));
         addInSavedMovies(movie);
-        // console.log(buttonSavedStatus);
-        // setPreSavedMovies([]);
       })
       .catch((err) => console.log(err));
   };
@@ -238,7 +198,7 @@ export default function Movies({
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}
-        buttonSavedStatus={buttonSavedStatus}
+
         moviesList={viewMoviesList}
       />
       <button

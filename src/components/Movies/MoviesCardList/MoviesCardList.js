@@ -12,7 +12,7 @@ export default function MoviesCardList({
       console.log(props.moviesList);
       return props.moviesList.map((item) => (
         <MoviesCard
-          buttonSavedStatus={buttonSavedStatus}
+
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
           movie={item}
