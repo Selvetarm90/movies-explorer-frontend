@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       localStorage.removeItem('movie-name');
-      localStorage.removeItem('view-movies');
+     // localStorage.removeItem('view-movies');
       const token = localStorage.getItem('jwt');
       setToken(token);
       auth
@@ -159,11 +159,15 @@ function App() {
 
     localStorage.removeItem('view-movies');
     if (checkboxState) {
-      console.log(findedMovies)
+      console.log(findedMovies);
       if (findedMovies?.movies) {
         setFindedMovies({
-          movies: findedMovies.movies.filter((item) => item.duration < 40),
+          filterMovies: findedMovies.movies.filter(
+            (item) => item.duration < 40,
+          ),
+          movies: findedMovies.movies,
         });
+        return;
       }
       if (!findedMovies?.movies) {
         setFindedMovies({

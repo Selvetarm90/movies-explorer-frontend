@@ -15,8 +15,6 @@ export default function Movies({
   const [checkboxState, setCheckboxState] = useState(false);
   const [movieName, setMovieName] = useState('');
 
-
-
   useEffect(() => {
     if (movies.length && !findedMovies.movies) {
       const savedMovieName = localStorage.getItem('movie-name');
@@ -34,9 +32,7 @@ export default function Movies({
         return;
       }
       if (movies.length) {
-        console.log(movies);
         startMoviesList(movies, findedMovies.movies);
-        console.log(findedMovies);
       }
     }
   }, [movies]);
@@ -44,26 +40,27 @@ export default function Movies({
   useEffect(() => {
     if (checkboxState) {
       const savedMovieName = localStorage.getItem('movie-name');
-      console.log(movieName)
-      console.log(savedMovieName)
+
       handleSearchMovies(movieName || savedMovieName, checkboxState);
-    }
-    else{
-      startMoviesList(movies, findedMovies.movies)
+    } else {
+      startMoviesList(movies, findedMovies.movies);
     }
   }, [checkboxState]);
 
   useEffect(() => {
     console.log(findedMovies.movies);
-    const savedViewMoviesList = JSON.parse(
-      localStorage.getItem('view-movies'),
-    );
+    const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
     if (savedViewMoviesList?.length) {
       setViewMoviesList(savedViewMoviesList);
       return;
     }
+    if (findedMovies.filterMovies) {
+      startMoviesList(movies, findedMovies.filterMovies);
+      return;
+    }
     if (findedMovies.movies) {
       startMoviesList(movies, findedMovies.movies);
+      return;
     }
   }, [findedMovies]);
 
@@ -77,8 +74,6 @@ export default function Movies({
     } else setbuttonMoreVisible(true);
   }, [viewMoviesList]);
 
-
-
   const startMoviesList = (movies, findedMovies) => {
     const viewMovies = [];
     const savedMovieName = localStorage.getItem('movie-name');
@@ -89,10 +84,9 @@ export default function Movies({
         setViewMoviesList(movies);
         return;
       }
-
     }
 
-    if (findedMovies?.length && findedMovies.length <= 12  ) {
+    if (findedMovies?.length && findedMovies.length <= 12) {
       localStorage.setItem('view-movies', JSON.stringify(findedMovies));
       setViewMoviesList(findedMovies);
       return;
@@ -109,7 +103,7 @@ export default function Movies({
     }
     if (findedMovies && !findedMovies?.length) {
       console.log('нету!!');
-      return
+      return;
     }
 
     if (movies.length) {
@@ -157,7 +151,7 @@ export default function Movies({
 
   const handleSubmitSearchForm = (evt) => {
     evt.preventDefault();
-   // localStorage.removeItem('view-movies');
+    // localStorage.removeItem('view-movies');
     // setViewMoviesList([]);
     handleSearchMovies(movieName.toLowerCase(), checkboxState);
     localStorage.setItem('movie-name', movieName);
@@ -198,7 +192,6 @@ export default function Movies({
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}
-
         moviesList={viewMoviesList}
       />
       <button
