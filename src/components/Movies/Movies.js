@@ -7,6 +7,7 @@ import * as mainApi from '../../utils/MainApi';
 export default function Movies({
   movies,
   findedMovies,
+  filterMovies,
   handleSearchMovies,
   addInSavedMovies,
 }) {
@@ -37,23 +38,31 @@ export default function Movies({
     }
   }, [movies]);
 
-  useEffect(() => {
-    if (checkboxState) {
-      const savedMovieName = localStorage.getItem('movie-name');
+  // useEffect(() => {
+  //   if (movies.length) {
+  //     if (checkboxState) {
+  //       const savedMovieName = localStorage.getItem('movie-name');
 
-      handleSearchMovies(movieName || savedMovieName, checkboxState);
-    } else {
-      startMoviesList(movies, findedMovies.movies);
-    }
-  }, [checkboxState]);
+  //       filterMovies();
+
+  //       // handleSearchMovies(movieName || savedMovieName, checkboxState);
+  //     } else {
+  //       startMoviesList(movies, findedMovies.movies);
+  //     }
+  //   }
+  // }, [checkboxState]);
 
   useEffect(() => {
     console.log(findedMovies.movies);
+    setCheckboxState(localStorage.getItem('checkbox') === 'true');
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
+
     if (savedViewMoviesList?.length) {
       setViewMoviesList(savedViewMoviesList);
+      console.log(savedViewMoviesList);
       return;
     }
+
     if (findedMovies.filterMovies) {
       startMoviesList(movies, findedMovies.filterMovies);
       return;
@@ -76,12 +85,14 @@ export default function Movies({
 
   const startMoviesList = (movies, findedMovies) => {
     const viewMovies = [];
+    console.log(movies);
     const savedMovieName = localStorage.getItem('movie-name');
 
     if (!movieName && !savedMovieName) {
       if (movies.length <= 12 && movies.length) {
         localStorage.setItem('view-movies', JSON.stringify(movies));
         setViewMoviesList(movies);
+        setbuttonMoreVisible(false);
         return;
       }
     }
@@ -89,6 +100,7 @@ export default function Movies({
     if (findedMovies?.length && findedMovies.length <= 12) {
       localStorage.setItem('view-movies', JSON.stringify(findedMovies));
       setViewMoviesList(findedMovies);
+      setbuttonMoreVisible(false);
       return;
     }
 
@@ -107,15 +119,14 @@ export default function Movies({
     }
 
     if (movies.length) {
+      console.log(movies);
+      console.log(viewMovies);
       for (let i = 0; i <= 11; i++) {
         viewMovies.push(movies[i]);
       }
       setViewMoviesList(viewMovies);
-      localStorage.setItem('view-movies', JSON.stringify(viewMovies));
-      return;
+     // localStorage.setItem('view-movies', JSON.stringify(viewMovies));
     }
-
-    console.log(viewMovies);
   };
 
   const handleClickButtonMore = () => {
@@ -139,8 +150,14 @@ export default function Movies({
   };
 
   const handleChangeCheckbox = (evt) => {
-    setCheckboxState(evt.target.checked);
-    localStorage.setItem('checkbox', evt.target.checked);
+    const checkboxStatus = evt.target.checked;
+    setCheckboxState(checkboxStatus);
+    localStorage.setItem('checkbox', checkboxStatus);
+    if (checkboxStatus) {
+      filterMovies();
+    } else {
+      startMoviesList(movies, findedMovies.movies);
+    }
 
     console.log(checkboxState);
   };
@@ -181,6 +198,8 @@ export default function Movies({
       })
       .catch((err) => console.log(err));
   };
+
+  const handleClickCheckbox = () => {};
   return (
     <main className='movies'>
       <SearchForm
@@ -188,7 +207,9 @@ export default function Movies({
         handleChangeCheckbox={handleChangeCheckbox}
         handleChangeMovieName={handleChangeMovieName}
         handleSubmitSearchForm={handleSubmitSearchForm}
+        handleClickCheckbox={handleClickCheckbox}
         movieName={movieName}
+        checkboxState={checkboxState}
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}

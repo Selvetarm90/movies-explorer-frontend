@@ -7,7 +7,9 @@ export default function SearchForm({
   handleChangeCheckbox,
   handleChangeMovieName,
   handleSubmitSearchForm,
-  movieName
+  movieName,
+  checkboxState,
+  handleClickCheckbox,
 }) {
   // const [movieName, setMovieName] = useState('');
   // const handleChangeMovieName = (evt) => {
@@ -32,7 +34,11 @@ export default function SearchForm({
       <button className='search-form__button' type='submit'>
         Найти
       </button>
-      <FilterCheckbox handleChangeCheckbox={handleChangeCheckbox} />
+      <FilterCheckbox
+        handleChangeCheckbox={handleChangeCheckbox}
+        checkboxState={checkboxState}
+        handleClickCheckbox={handleClickCheckbox}
+      />
     </form>
   );
 }

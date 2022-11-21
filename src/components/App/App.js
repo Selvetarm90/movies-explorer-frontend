@@ -32,6 +32,9 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    localStorage.removeItem('movie-name');
+    localStorage.removeItem('view-movies');
+    localStorage.removeItem('checkbox');
     moviesApi
       .getMovies()
       .then((movies) => {
@@ -56,9 +59,29 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log(savedMovies);
+    if (initialCards.length) {
+      console.log(initialCards);
+      console.log(savedMovies);
+      if (!savedMovies.length) {
+        setMovies(initialCards);
+        return
+      }
+      if (savedMovies.length && initialCards.length) {
+        const changeSaveButtonStatus = () =>
+    initialCards.map((m) => {
+      const changingMovies = savedMovies.some((sm) => m.id === sm.movieId);
+      if (changingMovies) {
+        return { buttonStatusSave: true, ...m };
+      } else return m;
+    });
+        setMovies(changeSaveButtonStatus);
+      }
+    }
+  }, [savedMovies, initialCards]);
+
+  useEffect(() => {
     if (loggedIn) {
-      localStorage.removeItem('movie-name');
-     // localStorage.removeItem('view-movies');
       const token = localStorage.getItem('jwt');
       setToken(token);
       auth
@@ -89,57 +112,9 @@ function App() {
     }
   }, [currentUser]);
 
-  useEffect(() => {
-    console.log(savedMovies);
-    if (initialCards.length) {
-      console.log(initialCards);
-      if (!savedMovies.length) {
-        setMovies(initialCards);
-      } else {
-        setMovies(() =>
-          initialCards.map((m) => {
-            const changingMovies = savedMovies.some(
-              (sm) => m.id === sm.movieId,
-            );
-            if (changingMovies) {
-              return { buttonStatusSave: true, ...m };
-            } else return m;
-          }),
-        );
-      }
-    }
-  }, [savedMovies, initialCards]);
-
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
   const closeAllPopups = () => setNavigatePopup(false);
-
-  // const changeSaveButtonStatus = (movie) => {
-  //   return movies.map((m) =>
-  //     m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
-  //   );
-  // };
-
-  // const handleSaveMovie = (data) => {
-  //   mainApi
-  //     .addMovie(data, token)
-  //     .then((movie) => {
-  //       console.log(movie)
-  //       //setButtonSavedStatus(buttonSavedStatus.concat(movie.movieId));
-  //       //Нужно сохранить в сторэйдж фильмы после сохранения фильма!!
-  //       // localStorage.setItem(
-  //       //   'view-movies',
-  //       //   JSON.stringify(changeSaveButtonStatus(movie)),
-  //       // );
-  //       // console.log(JSON.parse(localStorage.getItem('view-movies')));
-  //       return movie
-
-  //       setMovies(() => changeSaveButtonStatus(movie));
-  //       // console.log(buttonSavedStatus);
-  //       setPreSavedMovies([]);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
 
   const addInSavedMovies = (movie) => {
     mainApi
@@ -154,30 +129,54 @@ function App() {
       .catch((err) => console.log(err));
   };
 
+  const filterMovies = () => {
+
+    localStorage.removeItem('view-movies');
+    if (findedMovies?.movies) {
+      setFindedMovies({
+        filterMovies: findedMovies.movies.filter((item) => item.duration <= 40),
+        movies: findedMovies.movies,
+      });
+      return;
+    }
+    if (!findedMovies?.movies) {
+      setFindedMovies({
+        filterMovies: movies.filter((item) => item.duration <= 40),
+        movies: movies,
+      });
+    }
+  };
+
   const handleSearchMovies = (text, checkboxState) => {
     console.log(findedMovies);
 
     localStorage.removeItem('view-movies');
     if (checkboxState) {
-      console.log(findedMovies);
-      if (findedMovies?.movies) {
-        setFindedMovies({
-          filterMovies: findedMovies.movies.filter(
-            (item) => item.duration < 40,
-          ),
-          movies: findedMovies.movies,
-        });
-        return;
-      }
-      if (!findedMovies?.movies) {
-        setFindedMovies({
-          movies: movies.filter((item) => item.duration < 40),
-        });
-      }
+      // console.log(findedMovies);
+      // if (findedMovies?.movies) {
+      //   setFindedMovies({
+      //     filterMovies: findedMovies.movies.filter(
+      //       (item) => item.duration < 40,
+      //     ),
+      //     movies: findedMovies.movies,
+      //   });
+      //   return;
+      // }
+      // if (!findedMovies?.movies) {
+      //   setFindedMovies({
+      //     movies: movies.filter((item) => item.duration < 40),
+      //   });
+      // }
 
-      // console.log({
-      //   movies: findedMovies.filter((item) => item.duration < 40),
-      // });
+      setFindedMovies({
+        filterMovies: movies.filter(
+          (item) =>
+            item.nameRU.toLowerCase().includes(text) && item.duration < 40,
+        ),
+        movies: movies.filter((item) =>
+          item.nameRU.toLowerCase().includes(text),
+        ),
+      });
     } else {
       setFindedMovies({
         movies: movies.filter((item) =>
@@ -186,6 +185,8 @@ function App() {
       });
     }
   };
+
+
 
   const handleDeleteButtonStatusLocal = (movieId) => {
     const viewMovies = JSON.parse(localStorage.getItem('view-movies'));
@@ -229,7 +230,7 @@ function App() {
         setMovies(() => handleDeleteButtonStatus(movieId));
 
         console.log(movie);
-        setPreSavedMovies([]);
+       // setPreSavedMovies([]);
       })
       .catch((err) => console.log(err));
   };
@@ -303,6 +304,8 @@ function App() {
               addInSavedMovies={addInSavedMovies}
               movies={movies}
               findedMovies={findedMovies}
+              filterMovies={filterMovies}
+
               // buttonSavedStatus={buttonSavedStatus}
             />
             <Footer />

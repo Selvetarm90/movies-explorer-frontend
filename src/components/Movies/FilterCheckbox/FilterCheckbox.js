@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './FilterCheckbox.css';
 
-export default function FilterCheckbox({ handleChangeCheckbox }) {
+export default function FilterCheckbox({ handleChangeCheckbox, checkboxState, handleClickCheckbox }) {
   return (
     <div className='filter-checkbox'>
       <input
@@ -9,6 +9,8 @@ export default function FilterCheckbox({ handleChangeCheckbox }) {
         className='filter-checkbox__button'
         id='filter'
         onChange={handleChangeCheckbox}
+        onClick={handleClickCheckbox}
+        checked={checkboxState}
       />
       <label htmlFor='filter' className='filter-checkbox__checkbox-name'>
         Короткометражки
