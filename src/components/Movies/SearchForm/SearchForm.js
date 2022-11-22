@@ -11,6 +11,7 @@ export default function SearchForm({
   checkboxState,
   handleClickCheckbox,
 }) {
+
   // const [movieName, setMovieName] = useState('');
   // const handleChangeMovieName = (evt) => {
   //   setMovieName(evt.target.value);

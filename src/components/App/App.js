@@ -20,7 +20,11 @@ function App() {
   const [isNavigatePopupOpen, setNavigatePopup] = useState(false);
   const [initialCards, setInitialCards] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [findedMovies, setFindedMovies] = useState([]);
+  const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
+
+  const [findedMovies, setFindedMovies] = useState(
+    savedFindedMovies ? savedFindedMovies : [],
+  );
   const [savedMovies, setSavedMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -32,9 +36,9 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    localStorage.removeItem('movie-name');
-    localStorage.removeItem('view-movies');
-    localStorage.removeItem('checkbox');
+    // localStorage.removeItem('movie-name');
+    // localStorage.removeItem('view-movies');
+    // localStorage.removeItem('checkbox');
     moviesApi
       .getMovies()
       .then((movies) => {
@@ -65,16 +69,18 @@ function App() {
       console.log(savedMovies);
       if (!savedMovies.length) {
         setMovies(initialCards);
-        return
+        return;
       }
       if (savedMovies.length && initialCards.length) {
         const changeSaveButtonStatus = () =>
-    initialCards.map((m) => {
-      const changingMovies = savedMovies.some((sm) => m.id === sm.movieId);
-      if (changingMovies) {
-        return { buttonStatusSave: true, ...m };
-      } else return m;
-    });
+          initialCards.map((m) => {
+            const changingMovies = savedMovies.some(
+              (sm) => m.id === sm.movieId,
+            );
+            if (changingMovies) {
+              return { buttonStatusSave: true, ...m };
+            } else return m;
+          });
         setMovies(changeSaveButtonStatus);
       }
     }
@@ -130,68 +136,86 @@ function App() {
   };
 
   const filterMovies = () => {
-
-    localStorage.removeItem('view-movies');
+    console.log(savedFindedMovies);
+    if (savedFindedMovies.movies || savedFindedMovies) {
+      const movieList = savedFindedMovies.movies
+        ? savedFindedMovies.movies
+        : savedFindedMovies;
+      setFindedMovies({
+        filterMovies: movieList.filter(
+          (item) => item.duration <= 40,
+        ),
+      });
+      localStorage.setItem(
+        'finded-movies',
+        JSON.stringify({
+          filterMovies: movieList.filter(
+            (item) => item.duration <= 40,
+          ),
+        }),
+      );
+      return;
+    }
     if (findedMovies?.movies) {
       setFindedMovies({
         filterMovies: findedMovies.movies.filter((item) => item.duration <= 40),
-        movies: findedMovies.movies,
       });
+      localStorage.setItem(
+        'finded-movies',
+        JSON.stringify({
+          filterMovies: findedMovies.movies.filter(
+            (item) => item.duration <= 40,
+          ),
+        }),
+      );
       return;
     }
     if (!findedMovies?.movies) {
       setFindedMovies({
         filterMovies: movies.filter((item) => item.duration <= 40),
-        movies: movies,
       });
+      localStorage.setItem(
+        'finded-movies',
+        JSON.stringify({
+          filterMovies: movies.filter((item) => item.duration <= 40),
+        }),
+      );
     }
   };
 
   const handleSearchMovies = (text, checkboxState) => {
     console.log(findedMovies);
+    console.log(movies);
 
     localStorage.removeItem('view-movies');
-    if (checkboxState) {
-      // console.log(findedMovies);
-      // if (findedMovies?.movies) {
-      //   setFindedMovies({
-      //     filterMovies: findedMovies.movies.filter(
-      //       (item) => item.duration < 40,
-      //     ),
-      //     movies: findedMovies.movies,
-      //   });
-      //   return;
-      // }
-      // if (!findedMovies?.movies) {
-      //   setFindedMovies({
-      //     movies: movies.filter((item) => item.duration < 40),
-      //   });
-      // }
+    const moviesList = checkboxState
+      ? {
+          filterMovies: movies.filter(
+            (item) =>
+              item.nameRU.toLowerCase().includes(text) && item.duration < 40,
+          ),
+          movies: movies.filter((item) =>
+            item.nameRU.toLowerCase().includes(text),
+          ),
+        }
+      : {
+          movies: movies.filter((item) =>
+            item.nameRU.toLowerCase().includes(text),
+          ),
+        };
+    console.log(moviesList);
 
-      setFindedMovies({
-        filterMovies: movies.filter(
-          (item) =>
-            item.nameRU.toLowerCase().includes(text) && item.duration < 40,
-        ),
-        movies: movies.filter((item) =>
-          item.nameRU.toLowerCase().includes(text),
-        ),
-      });
-    } else {
-      setFindedMovies({
-        movies: movies.filter((item) =>
-          item.nameRU.toLowerCase().includes(text),
-        ),
-      });
-    }
+    setFindedMovies(moviesList);
+    localStorage.setItem('finded-movies', JSON.stringify(moviesList));
   };
 
-
-
-  const handleDeleteButtonStatusLocal = (movieId) => {
-    const viewMovies = JSON.parse(localStorage.getItem('view-movies'));
-    console.log(viewMovies);
-    return viewMovies.map((m) => {
+  const handleDeleteButtonStatusLocal = (
+    movieId,
+    moviesList = JSON.parse(localStorage.getItem('view-movies')),
+  ) => {
+    const savedViewMovies = JSON.parse(localStorage.getItem('view-movies'));
+    console.log(moviesList);
+    return moviesList.map((m) => {
       if (m.id === movieId) {
         delete m.buttonStatusSave;
       }
@@ -226,11 +250,20 @@ function App() {
           'view-movies',
           JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
         );
+        localStorage.setItem(
+          'finded-movies',
+          JSON.stringify(
+            handleDeleteButtonStatusLocal(
+              movieId,
+              findedMovies.filterMovies || findedMovies.movies,
+            ),
+          ),
+        );
         console.log(JSON.parse(localStorage.getItem('view-movies')));
         setMovies(() => handleDeleteButtonStatus(movieId));
 
         console.log(movie);
-       // setPreSavedMovies([]);
+        // setPreSavedMovies([]);
       })
       .catch((err) => console.log(err));
   };
@@ -272,6 +305,8 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('jwt');
     localStorage.removeItem('movie-name');
+    localStorage.removeItem('finded-movies');
+    localStorage.removeItem('view-movies');
     setToken('');
     setEmail('');
     setLoggedIn(false);

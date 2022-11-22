@@ -11,10 +11,14 @@ export default function Movies({
   handleSearchMovies,
   addInSavedMovies,
 }) {
-  const [viewMoviesList, setViewMoviesList] = useState([]);
+  const [viewMoviesList, setViewMoviesList] = useState(
+    JSON.parse(localStorage.getItem('view-movies')) || [],
+  );
   const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
   const [checkboxState, setCheckboxState] = useState(false);
-  const [movieName, setMovieName] = useState('');
+  const [movieName, setMovieName] = useState(
+    localStorage.getItem('movie-name') || '',
+  );
 
   useEffect(() => {
     if (movies.length && !findedMovies.movies) {
@@ -24,14 +28,15 @@ export default function Movies({
       );
       console.log(savedMovieName);
       console.log(savedViewMoviesList);
-      if (savedMovieName) {
-        handleSearchMovies(savedMovieName.toLowerCase(), checkboxState);
-        return;
-      }
       if (savedViewMoviesList?.length) {
         setViewMoviesList(savedViewMoviesList);
         return;
       }
+      if (savedMovieName) {
+        handleSearchMovies(savedMovieName.toLowerCase(), checkboxState);
+        return;
+      }
+
       if (movies.length) {
         startMoviesList(movies, findedMovies.movies);
       }
@@ -57,16 +62,17 @@ export default function Movies({
     setCheckboxState(localStorage.getItem('checkbox') === 'true');
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
 
+    if (findedMovies.filterMovies) {
+      startMoviesList(movies, findedMovies.filterMovies);
+      return;
+    }
+
     if (savedViewMoviesList?.length) {
       setViewMoviesList(savedViewMoviesList);
       console.log(savedViewMoviesList);
       return;
     }
 
-    if (findedMovies.filterMovies) {
-      startMoviesList(movies, findedMovies.filterMovies);
-      return;
-    }
     if (findedMovies.movies) {
       startMoviesList(movies, findedMovies.movies);
       return;
@@ -74,7 +80,16 @@ export default function Movies({
   }, [findedMovies]);
 
   useEffect(() => {
-    const moviesList = findedMovies.movies ? findedMovies.movies : [];
+    console.log(findedMovies);
+    console.log(viewMoviesList);
+    const moviesList = findedMovies.movies
+      ? findedMovies.movies
+      : findedMovies.filterMovies
+      ? findedMovies.filterMovies
+      : findedMovies
+      ? findedMovies
+      : [];
+    console.log(moviesList);
     if (
       viewMoviesList.length === movies.length ||
       viewMoviesList.length === moviesList.length
@@ -125,13 +140,17 @@ export default function Movies({
         viewMovies.push(movies[i]);
       }
       setViewMoviesList(viewMovies);
-     // localStorage.setItem('view-movies', JSON.stringify(viewMovies));
+      // localStorage.setItem('view-movies', JSON.stringify(viewMovies));
     }
   };
 
   const handleClickButtonMore = () => {
     const addedMovies = [];
-    const handleMovies = findedMovies.movies ? findedMovies.movies : movies;
+    const handleMovies = findedMovies.movies
+      ? findedMovies.movies
+      : findedMovies.filterMovies
+      ? findedMovies.filterMovies
+      : movies;
 
     for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
       console.log(viewMoviesList.length);
@@ -156,7 +175,7 @@ export default function Movies({
     if (checkboxStatus) {
       filterMovies();
     } else {
-      startMoviesList(movies, findedMovies.movies);
+      handleSearchMovies(movieName.toLowerCase(), false);
     }
 
     console.log(checkboxState);
@@ -174,8 +193,8 @@ export default function Movies({
     localStorage.setItem('movie-name', movieName);
     console.log(movieName);
   };
-  const changeSaveButtonStatus = (movie) => {
-    return viewMoviesList.map((m) =>
+  const changeSaveButtonStatus = (movie, movieList = viewMoviesList) => {
+    return movieList.map((m) =>
       m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
     );
   };
@@ -191,9 +210,14 @@ export default function Movies({
           'view-movies',
           JSON.stringify(changeSaveButtonStatus(movie)),
         );
+        localStorage.setItem(
+          'finded-movies',
+          JSON.stringify(changeSaveButtonStatus(movie, findedMovies.movies)),
+        );
         console.log(JSON.parse(localStorage.getItem('view-movies')));
 
         setViewMoviesList(() => changeSaveButtonStatus(movie));
+
         addInSavedMovies(movie);
       })
       .catch((err) => console.log(err));
