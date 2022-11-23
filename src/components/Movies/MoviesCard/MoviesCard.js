@@ -9,7 +9,7 @@ export default function MoviesCard({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const handleSave = () => {
+  const handleClick = () => {
     if (!props.movie.buttonStatusSave) {
 
       handleSaveMovie({
@@ -26,6 +26,11 @@ export default function MoviesCard({
         nameRU: props.movie.nameRU,
         nameEN: props.movie.nameEN,
       });
+    }
+    if (props.movie.buttonStatusSave) {
+      console.log(props.movie)
+      console.log(props.movies)
+      handleDeleteMovie('', props.movie.id);
     }
   };
 
@@ -49,7 +54,7 @@ export default function MoviesCard({
       />
       <button
         type='button'
-        onClick={props.movie.owner ? handleDelete : handleSave}
+        onClick={props.movie.owner ? handleDelete : handleClick}
         className={`card__button ${
           props.buttonSavedCard ? 'card__button_del-movie' : (props.movie.buttonStatusSave ? 'card__button_saved' : '')
         }`}

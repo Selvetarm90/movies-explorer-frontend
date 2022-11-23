@@ -137,7 +137,7 @@ function App() {
 
   const filterMovies = () => {
     console.log(savedFindedMovies);
-    if (savedFindedMovies.movies || savedFindedMovies) {
+    if (savedFindedMovies?.movies || savedFindedMovies) {
       const movieList = savedFindedMovies.movies
         ? savedFindedMovies.movies
         : savedFindedMovies;
@@ -233,6 +233,9 @@ function App() {
   };
 
   const handleDeleteMovie = (id, movieId) => {
+    if (id === '') {
+      id = savedMovies.find(m => m.movieId === movieId)._id
+    }
     mainApi
       .delMovie(id, token)
       .then((movie) => {
@@ -336,6 +339,7 @@ function App() {
             />
             <Movies
               handleSearchMovies={handleSearchMovies}
+              handleDeleteMovie={handleDeleteMovie}
               addInSavedMovies={addInSavedMovies}
               movies={movies}
               findedMovies={findedMovies}

@@ -68,7 +68,7 @@
 
 .card__button_saved:hover {
   opacity: 1;
-  cursor: default;
+
 }
 
 .card__button_del-movie {

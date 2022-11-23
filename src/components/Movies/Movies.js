@@ -9,6 +9,7 @@ export default function Movies({
   findedMovies,
   filterMovies,
   handleSearchMovies,
+  handleDeleteMovie,
   addInSavedMovies,
 }) {
   const [viewMoviesList, setViewMoviesList] = useState(
@@ -61,9 +62,10 @@ export default function Movies({
     console.log(findedMovies.movies);
     setCheckboxState(localStorage.getItem('checkbox') === 'true');
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
+    const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
 
-    if (findedMovies.filterMovies) {
-      startMoviesList(movies, findedMovies.filterMovies);
+    if (savedFindedMovies?.filterMovies || findedMovies.filterMovies) {
+      startMoviesList(movies, savedFindedMovies?.filterMovies || findedMovies.filterMovies);
       return;
     }
 
@@ -73,8 +75,8 @@ export default function Movies({
       return;
     }
 
-    if (findedMovies.movies) {
-      startMoviesList(movies, findedMovies.movies);
+    if (savedFindedMovies?.movies || findedMovies.movies) {
+      startMoviesList(movies, savedFindedMovies?.movies || findedMovies.movies);
       return;
     }
   }, [findedMovies]);
@@ -210,10 +212,28 @@ export default function Movies({
           'view-movies',
           JSON.stringify(changeSaveButtonStatus(movie)),
         );
-        localStorage.setItem(
-          'finded-movies',
-          JSON.stringify(changeSaveButtonStatus(movie, findedMovies.movies)),
-        );
+        if (findedMovies.movies?.length) {
+          console.log('сохранил найденое');
+          localStorage.setItem(
+            'finded-movies',
+            JSON.stringify({
+              movies: changeSaveButtonStatus(movie, findedMovies.movies),
+            }),
+          );
+        }
+        if (findedMovies.filterMovies?.length) {
+          console.log('сохранил фильтрованое');
+          localStorage.setItem(
+            'finded-movies',
+            JSON.stringify({
+              filterMovies: changeSaveButtonStatus(
+                movie,
+                findedMovies.filterMovies,
+              ),
+            }),
+          );
+        }
+
         console.log(JSON.parse(localStorage.getItem('view-movies')));
 
         setViewMoviesList(() => changeSaveButtonStatus(movie));
@@ -237,6 +257,7 @@ export default function Movies({
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}
+        handleDeleteMovie={handleDeleteMovie}
         moviesList={viewMoviesList}
       />
       <button
