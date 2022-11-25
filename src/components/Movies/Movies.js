@@ -65,7 +65,10 @@ export default function Movies({
     const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
 
     if (savedFindedMovies?.filterMovies || findedMovies.filterMovies) {
-      startMoviesList(movies, savedFindedMovies?.filterMovies || findedMovies.filterMovies);
+      startMoviesList(
+        movies,
+        savedFindedMovies?.filterMovies || findedMovies.filterMovies,
+      );
       return;
     }
 
@@ -196,6 +199,8 @@ export default function Movies({
     console.log(movieName);
   };
   const changeSaveButtonStatus = (movie, movieList = viewMoviesList) => {
+    console.log(movieList);
+    console.log(viewMoviesList);
     return movieList.map((m) =>
       m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
     );
@@ -203,6 +208,7 @@ export default function Movies({
 
   const handleSaveMovie = (data) => {
     const token = localStorage.getItem('jwt');
+    const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
     mainApi
       .addMovie(data, token)
       .then((movie) => {
@@ -228,7 +234,7 @@ export default function Movies({
             JSON.stringify({
               filterMovies: changeSaveButtonStatus(
                 movie,
-                findedMovies.filterMovies,
+                savedFindedMovies?.filterMovies || findedMovies.filterMovies,
               ),
             }),
           );
