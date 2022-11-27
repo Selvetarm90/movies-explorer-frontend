@@ -34,6 +34,9 @@ function App() {
   // const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
   const [preSavedMovies, setPreSavedMovies] = useState([]);
   const history = useHistory();
+  const [width, setWidth] = useState(window.innerWidth);
+  const [moviesListLength, setMoviesListLength] = useState(12);
+  const [addMoviesLength, setAddMoviesLength] = useState(3);
 
   useEffect(() => {
     // localStorage.removeItem('movie-name');
@@ -45,6 +48,11 @@ function App() {
         setInitialCards(movies);
       })
       .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('resize', changeWidthWindow);
+    return () => window.removeEventListener('resize', changeWidthWindow);
   }, []);
 
   useEffect(() => {
@@ -61,6 +69,22 @@ function App() {
         .catch((err) => console.log(err));
     }
   }, []);
+
+  useEffect(() => {
+    if (width > 1160) {
+      setAddMoviesLength(3);
+      setMoviesListLength(12);
+      console.log('full');
+    } else if (width <= 1160 && width >= 731) {
+      setAddMoviesLength(2);
+      setMoviesListLength(8);
+      console.log('meedle');
+    } else if (width < 731) {
+      setAddMoviesLength(2);
+      setMoviesListLength(5);
+      console.log('small');
+    }
+  }, [width]);
 
   useEffect(() => {
     console.log(savedMovies);
@@ -117,6 +141,10 @@ function App() {
         .catch((err) => console.log(err));
     }
   }, [currentUser]);
+
+  const changeWidthWindow = () => {
+    setWidth(window.innerWidth);
+  };
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
 
@@ -250,20 +278,28 @@ function App() {
         );
         console.log(findedMovies);
         console.log(savedFindedMovies);
-
-        localStorage.setItem(
-          'finded-movies',
-          JSON.stringify(
-            handleDeleteButtonStatusLocal(
-              movieId,
-              findedMovies?.filterMovies ||
-                findedMovies?.movies ||
-                savedFindedMovies?.filterMovies ||
-                savedFindedMovies?.movies ||
-                savedFindedMovies,
+        if (
+          findedMovies?.filtermovies ||
+          findedMovies?.movies ||
+          savedFindedMovies?.movies ||
+          savedFindedMovies?.filterMovies ||
+          savedFindedMovies.length
+        ) {
+          localStorage.setItem(
+            'finded-movies',
+            JSON.stringify(
+              handleDeleteButtonStatusLocal(
+                movieId,
+                findedMovies?.filterMovies ||
+                  findedMovies?.movies ||
+                  savedFindedMovies?.filterMovies ||
+                  savedFindedMovies?.movies ||
+                  savedFindedMovies,
+              ),
             ),
-          ),
-        );
+          );
+        }
+
         console.log(JSON.parse(localStorage.getItem('view-movies')));
         setMovies(() => handleDeleteButtonStatus(movieId));
 
@@ -363,8 +399,8 @@ function App() {
               movies={movies}
               findedMovies={findedMovies}
               filterMovies={filterMovies}
-
-              // buttonSavedStatus={buttonSavedStatus}
+              moviesListLength={moviesListLength}
+              addMoviesLength={addMoviesLength}
             />
             <Footer />
           </Route>

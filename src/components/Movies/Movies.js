@@ -11,6 +11,8 @@ export default function Movies({
   handleSearchMovies,
   handleDeleteMovie,
   addInSavedMovies,
+  moviesListLength,
+  addMoviesLength,
 }) {
   const [viewMoviesList, setViewMoviesList] = useState(
     JSON.parse(localStorage.getItem('view-movies')) || [],
@@ -44,25 +46,13 @@ export default function Movies({
     }
   }, [movies]);
 
-  // useEffect(() => {
-  //   if (movies.length) {
-  //     if (checkboxState) {
-  //       const savedMovieName = localStorage.getItem('movie-name');
-
-  //       filterMovies();
-
-  //       // handleSearchMovies(movieName || savedMovieName, checkboxState);
-  //     } else {
-  //       startMoviesList(movies, findedMovies.movies);
-  //     }
-  //   }
-  // }, [checkboxState]);
-
   useEffect(() => {
     console.log(findedMovies.movies);
     setCheckboxState(localStorage.getItem('checkbox') === 'true');
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
     const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
+
+
 
     if (savedFindedMovies?.filterMovies || findedMovies.filterMovies) {
       startMoviesList(
@@ -71,10 +61,14 @@ export default function Movies({
       );
       return;
     }
-
     if (savedViewMoviesList?.length) {
       setViewMoviesList(savedViewMoviesList);
+
       console.log(savedViewMoviesList);
+      return;
+    }
+    if (savedFindedMovies?.length || findedMovies.length) {
+      startMoviesList(movies, findedMovies || savedFindedMovies);
       return;
     }
 
@@ -82,15 +76,17 @@ export default function Movies({
       startMoviesList(movies, savedFindedMovies?.movies || findedMovies.movies);
       return;
     }
-  }, [findedMovies]);
+
+
+  }, [findedMovies, moviesListLength]);
 
   useEffect(() => {
     console.log(findedMovies);
     console.log(viewMoviesList);
-    const moviesList = findedMovies.movies
-      ? findedMovies.movies
-      : findedMovies.filterMovies
+    const moviesList = findedMovies.filterMovies
       ? findedMovies.filterMovies
+      : findedMovies.movies
+      ? findedMovies.movies
       : findedMovies
       ? findedMovies
       : [];
@@ -109,7 +105,7 @@ export default function Movies({
     const savedMovieName = localStorage.getItem('movie-name');
 
     if (!movieName && !savedMovieName) {
-      if (movies.length <= 12 && movies.length) {
+      if (movies.length <= moviesListLength && movies.length) {
         localStorage.setItem('view-movies', JSON.stringify(movies));
         setViewMoviesList(movies);
         setbuttonMoreVisible(false);
@@ -117,7 +113,7 @@ export default function Movies({
       }
     }
 
-    if (findedMovies?.length && findedMovies.length <= 12) {
+    if (findedMovies?.length && findedMovies.length <= moviesListLength) {
       localStorage.setItem('view-movies', JSON.stringify(findedMovies));
       setViewMoviesList(findedMovies);
       setbuttonMoreVisible(false);
@@ -126,7 +122,7 @@ export default function Movies({
 
     if (findedMovies?.length) {
       console.log('найденные фильмы');
-      for (let i = 0; i <= 11; i++) {
+      for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(findedMovies[i]);
       }
       setViewMoviesList(viewMovies);
@@ -135,13 +131,16 @@ export default function Movies({
     }
     if (findedMovies && !findedMovies?.length) {
       console.log('нету!!');
+      setViewMoviesList([]);
+      localStorage.removeItem('view-movies');
+
       return;
     }
 
     if (movies.length) {
       console.log(movies);
       console.log(viewMovies);
-      for (let i = 0; i <= 11; i++) {
+      for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(movies[i]);
       }
       setViewMoviesList(viewMovies);
@@ -155,9 +154,15 @@ export default function Movies({
       ? findedMovies.movies
       : findedMovies.filterMovies
       ? findedMovies.filterMovies
+      : findedMovies.length
+      ? findedMovies
       : movies;
 
-    for (let i = viewMoviesList.length; i <= viewMoviesList.length + 2; i++) {
+    for (
+      let i = viewMoviesList.length;
+      i <= viewMoviesList.length + addMoviesLength - 1;
+      i++
+    ) {
       console.log(viewMoviesList.length);
       if (handleMovies[i]) {
         addedMovies.push(handleMovies[i]);
@@ -173,11 +178,10 @@ export default function Movies({
     setViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
-  const handleChangeCheckbox = (evt) => {
-    const checkboxStatus = evt.target.checked;
-    setCheckboxState(checkboxStatus);
-    localStorage.setItem('checkbox', checkboxStatus);
-    if (checkboxStatus) {
+  const handleChangeCheckbox = (value) => {
+    setCheckboxState(value);
+    localStorage.setItem('checkbox', value);
+    if (value) {
       filterMovies();
     } else {
       handleSearchMovies(movieName.toLowerCase(), false);
@@ -186,12 +190,11 @@ export default function Movies({
     console.log(checkboxState);
   };
 
-  const handleChangeMovieName = (evt) => {
-    setMovieName(evt.target.value);
+  const handleChangeMovieName = (value) => {
+    setMovieName(value);
   };
 
-  const handleSubmitSearchForm = (evt) => {
-    evt.preventDefault();
+  const handleSubmitSearchForm = () => {
     // localStorage.removeItem('view-movies');
     // setViewMoviesList([]);
     handleSearchMovies(movieName.toLowerCase(), checkboxState);
