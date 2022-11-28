@@ -1,4 +1,5 @@
 .cards {
+  position: relative;
   max-width: 1140px;
   margin: 70px auto 10px;
   display: grid;
@@ -6,19 +7,13 @@
   justify-items: center;
   gap: 30px;
 }
-/* @media (max-width: 930px) {
-  .cards{
-    width: 581px;
-    grid-template-columns: repeat(2, 282px);
-  }
+
+.cards__not-found {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+  text-align: center;
 }
-@media (max-width: 620px) {
-  .cards{
-    width: 282px;
-    grid-template-columns: repeat(1, 282px);
-    gap: 20px;
-  }
-} */
 
 @media (max-width: 1160px) {
   .cards {

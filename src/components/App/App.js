@@ -6,6 +6,7 @@ import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
+import Preloader from '../Preloader/Preloader';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
@@ -31,23 +32,27 @@ function App() {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  // const [buttonSavedStatus, setButtonSavedStatus] = useState([]);
-  const [preSavedMovies, setPreSavedMovies] = useState([]);
   const history = useHistory();
   const [width, setWidth] = useState(window.innerWidth);
   const [moviesListLength, setMoviesListLength] = useState(12);
   const [addMoviesLength, setAddMoviesLength] = useState(3);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // localStorage.removeItem('movie-name');
-    // localStorage.removeItem('view-movies');
-    // localStorage.removeItem('checkbox');
+    setIsLoading(true);
     moviesApi
       .getMovies()
       .then((movies) => {
         setInitialCards(movies);
+        setTimeout(() => setIsLoading(false), 800);
       })
-      .catch((err) => console.log(err));
+      .catch(() =>
+        setMessage(
+          'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
+        ),
+      )
+      .finally(() => setTimeout(() => setIsLoading(false), 800));
   }, []);
 
   useEffect(() => {
@@ -373,6 +378,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+      {/* {isLoading && <Preloader />} */}
       <div className='App'>
         <Switch>
           <Route exact path='/'>
@@ -401,6 +407,7 @@ function App() {
               filterMovies={filterMovies}
               moviesListLength={moviesListLength}
               addMoviesLength={addMoviesLength}
+              isLoading={isLoading}
             />
             <Footer />
           </Route>

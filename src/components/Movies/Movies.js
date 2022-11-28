@@ -13,6 +13,7 @@ export default function Movies({
   addInSavedMovies,
   moviesListLength,
   addMoviesLength,
+  isLoading,
 }) {
   const [viewMoviesList, setViewMoviesList] = useState(
     JSON.parse(localStorage.getItem('view-movies')) || [],
@@ -52,8 +53,6 @@ export default function Movies({
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
     const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
 
-
-
     if (savedFindedMovies?.filterMovies || findedMovies.filterMovies) {
       startMoviesList(
         movies,
@@ -76,8 +75,6 @@ export default function Movies({
       startMoviesList(movies, savedFindedMovies?.movies || findedMovies.movies);
       return;
     }
-
-
   }, [findedMovies, moviesListLength]);
 
   useEffect(() => {
@@ -266,6 +263,7 @@ export default function Movies({
         handleSaveMovie={handleSaveMovie}
         handleDeleteMovie={handleDeleteMovie}
         moviesList={viewMoviesList}
+        isLoading={isLoading}
       />
       <button
         type='button'

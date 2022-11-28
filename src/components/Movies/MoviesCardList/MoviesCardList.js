@@ -1,3 +1,4 @@
+import Preloader from '../../Preloader/Preloader';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
@@ -12,7 +13,6 @@ export default function MoviesCardList({
       console.log(props.moviesList);
       return props.moviesList.map((item) => (
         <MoviesCard
-
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
           movie={item}
@@ -21,11 +21,19 @@ export default function MoviesCardList({
         />
       ));
     }
-    return 'Ничего нет!!!';
+    return (
+      <p className='cards__not-found'>{`${
+        props.message || 'Ничего не найдено.'
+      }`}</p>
+    );
   };
 
   return (
-    <section className='cards'>
+    <section
+
+      className={`${props.moviesList.length ? 'cards' : 'cards__not-found'}`}
+    >
+      {props.isLoading && <Preloader/>}
       <HandleMoviesList />
     </section>
   );
