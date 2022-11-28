@@ -45,14 +45,14 @@ function App() {
       .getMovies()
       .then((movies) => {
         setInitialCards(movies);
-        setTimeout(() => setIsLoading(false), 800);
+        setMessage('');
       })
-      .catch(() =>
+      .catch(() => {
         setMessage(
           'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
-        ),
-      )
-      .finally(() => setTimeout(() => setIsLoading(false), 800));
+        );
+      })
+      .finally(() => setTimeout(() => setIsLoading(true), 800));
   }, []);
 
   useEffect(() => {
@@ -148,7 +148,7 @@ function App() {
   }, [currentUser]);
 
   const changeWidthWindow = () => {
-    setWidth(window.innerWidth);
+    setTimeout(() => setWidth(window.innerWidth), 1200);
   };
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
@@ -214,6 +214,7 @@ function App() {
   };
 
   const handleSearchMovies = (text, checkboxState) => {
+    setIsLoading(true)
     localStorage.removeItem('view-movies');
     const moviesList = checkboxState
       ? {
@@ -234,6 +235,7 @@ function App() {
 
     setFindedMovies(moviesList);
     localStorage.setItem('finded-movies', JSON.stringify(moviesList));
+    setTimeout(() => setIsLoading(false), 400)
   };
 
   const handleDeleteButtonStatusLocal = (movieId, moviesList) => {
@@ -366,10 +368,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('movie-name');
-    localStorage.removeItem('finded-movies');
-    localStorage.removeItem('view-movies');
+    localStorage.clear();
     setToken('');
     setEmail('');
     setLoggedIn(false);
@@ -408,6 +407,7 @@ function App() {
               moviesListLength={moviesListLength}
               addMoviesLength={addMoviesLength}
               isLoading={isLoading}
+              message={message}
             />
             <Footer />
           </Route>

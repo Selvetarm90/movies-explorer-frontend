@@ -14,6 +14,7 @@ export default function Movies({
   moviesListLength,
   addMoviesLength,
   isLoading,
+  message,
 }) {
   const [viewMoviesList, setViewMoviesList] = useState(
     JSON.parse(localStorage.getItem('view-movies')) || [],
@@ -47,6 +48,8 @@ export default function Movies({
     }
   }, [movies]);
 
+
+
   useEffect(() => {
     console.log(findedMovies.movies);
     setCheckboxState(localStorage.getItem('checkbox') === 'true');
@@ -75,7 +78,7 @@ export default function Movies({
       startMoviesList(movies, savedFindedMovies?.movies || findedMovies.movies);
       return;
     }
-  }, [findedMovies, moviesListLength]);
+  }, [findedMovies]);
 
   useEffect(() => {
     console.log(findedMovies);
@@ -95,6 +98,12 @@ export default function Movies({
       setbuttonMoreVisible(false);
     } else setbuttonMoreVisible(true);
   }, [viewMoviesList]);
+
+  useEffect(() => {
+    if(movies.length && viewMoviesList.length){
+      handleSearchMovies(movieName.toLowerCase(), checkboxState);
+    }
+  }, [moviesListLength]);
 
   const startMoviesList = (movies, findedMovies) => {
     const viewMovies = [];
@@ -141,7 +150,6 @@ export default function Movies({
         viewMovies.push(movies[i]);
       }
       setViewMoviesList(viewMovies);
-      // localStorage.setItem('view-movies', JSON.stringify(viewMovies));
     }
   };
 
@@ -192,8 +200,6 @@ export default function Movies({
   };
 
   const handleSubmitSearchForm = () => {
-    // localStorage.removeItem('view-movies');
-    // setViewMoviesList([]);
     handleSearchMovies(movieName.toLowerCase(), checkboxState);
     localStorage.setItem('movie-name', movieName);
     console.log(movieName);
@@ -252,18 +258,19 @@ export default function Movies({
   return (
     <main className='movies'>
       <SearchForm
-        // searchMovies={handleSearchMovies}
         handleChangeCheckbox={handleChangeCheckbox}
         handleChangeMovieName={handleChangeMovieName}
         handleSubmitSearchForm={handleSubmitSearchForm}
         movieName={movieName}
         checkboxState={checkboxState}
+        isLoading={isLoading}
       />
       <MoviesCardList
         handleSaveMovie={handleSaveMovie}
         handleDeleteMovie={handleDeleteMovie}
         moviesList={viewMoviesList}
         isLoading={isLoading}
+        message={message}
       />
       <button
         type='button'

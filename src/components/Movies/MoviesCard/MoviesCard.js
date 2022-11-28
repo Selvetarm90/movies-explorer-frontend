@@ -11,7 +11,6 @@ export default function MoviesCard({
 
   const handleClick = () => {
     if (!props.movie.buttonStatusSave) {
-
       handleSaveMovie({
         country: props.movie.country,
         director: props.movie.director,
@@ -28,14 +27,13 @@ export default function MoviesCard({
       });
     }
     if (props.movie.buttonStatusSave) {
-      console.log(props.movie)
-      console.log(props.movies)
+      console.log(props.movie);
+      console.log(props.movies);
       handleDeleteMovie('', props.movie.id);
     }
   };
 
   const handleDelete = () => {
-
     handleDeleteMovie(props.movie._id, props.movie.movieId);
   };
 
@@ -43,23 +41,38 @@ export default function MoviesCard({
     <article className='card'>
       <h2 className='card__name'>{props.movie.nameRU}</h2>
       <p className='card__duration'>{`${props.movie.duration} минут`}</p>
-      <img
-        className='card__image'
-        alt={props.movie.nameRU}
-        src={
-          props.movie.owner
-            ? props.movie.thumbnail
-            : `https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`
-        }
-      />
+      <a
+        href={props.movie.trailerLink || 'https://www.youtube.com'}
+        target='_blank'
+        rel='noreferrer'
+      >
+        <img
+          className='card__image'
+          alt={props.movie.nameRU}
+          src={
+            props.movie.owner
+              ? props.movie.thumbnail
+              : `https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`
+          }
+        />
+      </a>
+
       <button
         type='button'
         onClick={props.movie.owner ? handleDelete : handleClick}
         className={`card__button ${
-          props.buttonSavedCard ? 'card__button_del-movie' : (props.movie.buttonStatusSave ? 'card__button_saved' : '')
+          props.buttonSavedCard
+            ? 'card__button_del-movie'
+            : props.movie.buttonStatusSave
+            ? 'card__button_saved'
+            : ''
         }`}
       >
-        {props.buttonSavedCard ? '' : props.movie.buttonStatusSave ? '' : 'Сохранить'}
+        {props.buttonSavedCard
+          ? ''
+          : props.movie.buttonStatusSave
+          ? ''
+          : 'Сохранить'}
       </button>
     </article>
   );

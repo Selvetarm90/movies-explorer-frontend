@@ -10,7 +10,7 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
   const [filteredSavedMovies, setFilteredSavedMovies] = useState([]);
   const [shortSavedMovies, setShortSavedMovies] = useState([]);
   const [movieNameSavedMovies, setMovieNameSavedMovies] = useState(
-    localStorage.getItem('saved-movie-name'),
+    localStorage.getItem('saved-movie-name') || '',
   );
 
   useEffect(() => {
@@ -29,14 +29,14 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
         (m) => m.nameRU.toLowerCase().includes(text) && m.duration < 40,
       );
       setShortSavedMovies(moviesList);
-      localStorage.setItem('saved-movies-short', shortSavedMovies);
+      //localStorage.setItem('saved-movies-short', shortSavedMovies);
       console.log(moviesList);
     } else {
       const moviesList = movies.filter((m) =>
         m.nameRU.toLowerCase().includes(text),
       );
       setFilteredSavedMovies(moviesList);
-      localStorage.setItem('saved-movies-finded', filteredSavedMovies);
+      //localStorage.setItem('saved-movies-finded', filteredSavedMovies);
       console.log(moviesList);
     }
   };

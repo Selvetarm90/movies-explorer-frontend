@@ -4,28 +4,19 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
 
 export default function SearchForm({
-  searchMovies,
   handleChangeCheckbox,
   handleChangeMovieName,
   handleSubmitSearchForm,
   movieName,
   movieNameSavedMovies,
   checkboxState,
+  isLoading,
   checkboxStateSavedMovies,
   handleSubmitSearchFormSavedMovies,
   handleChangeMovieNameSavedMovies,
   handleChangeCheckboxSavedMovies,
 }) {
   const location = useLocation();
-  // const [movieName, setMovieName] = useState('');
-  // const handleChangeMovieName = (evt) => {
-  //   setMovieName(evt.target.value);
-  // };
-  // const handleSubmitSearchForm = (evt) => {
-  //   evt.preventDefault();
-  //   searchMovies(movieName.toLowerCase());
-  //   console.log(movieName)
-  // };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -57,15 +48,6 @@ export default function SearchForm({
     }
   };
 
-  const handleCheckboxState = () => {
-    if (location.pathname === '/movies') {
-      return checkboxState;
-    }
-    if (location.pathname === '/saved-movies') {
-      return checkboxStateSavedMovies;
-    }
-  };
-
   return (
     <form className='search-form' onSubmit={handleSubmit} noValidate>
       <input
@@ -78,7 +60,7 @@ export default function SearchForm({
         required
         placeholder='Фильм'
       />
-      <button className='search-form__button' type='submit'>
+      <button className='search-form__button' type='submit' disabled={isLoading}>
         Найти
       </button>
       <FilterCheckbox

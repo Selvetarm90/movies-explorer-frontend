@@ -9,7 +9,7 @@ export default function MoviesCardList({
   ...props
 }) {
   const HandleMoviesList = () => {
-    if (props.moviesList.length > 0) {
+    if (props.moviesList.length > 0 && !props.message) {
       console.log(props.moviesList);
       return props.moviesList.map((item) => (
         <MoviesCard
@@ -31,7 +31,7 @@ export default function MoviesCardList({
   return (
     <section
 
-      className={`${props.moviesList.length ? 'cards' : 'cards__not-found'}`}
+      className={`cards${props.moviesList.length && !props.message ? '' : '__not-found'}`}
     >
       {props.isLoading && <Preloader/>}
       <HandleMoviesList />
