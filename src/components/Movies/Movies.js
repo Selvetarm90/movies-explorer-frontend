@@ -252,7 +252,6 @@ export default function Movies({
       .catch((err) => console.log(err));
   };
 
-  const handleClickCheckbox = () => {};
   return (
     <main className='movies'>
       <SearchForm
@@ -260,7 +259,6 @@ export default function Movies({
         handleChangeCheckbox={handleChangeCheckbox}
         handleChangeMovieName={handleChangeMovieName}
         handleSubmitSearchForm={handleSubmitSearchForm}
-        handleClickCheckbox={handleClickCheckbox}
         movieName={movieName}
         checkboxState={checkboxState}
       />

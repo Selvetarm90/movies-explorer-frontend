@@ -9,11 +9,12 @@ export default function SearchForm({
   handleChangeMovieName,
   handleSubmitSearchForm,
   movieName,
+  movieNameSavedMovies,
   checkboxState,
-  handleClickCheckbox,
+  checkboxStateSavedMovies,
   handleSubmitSearchFormSavedMovies,
   handleChangeMovieNameSavedMovies,
-  handleChangeCheckboxSavedMovies
+  handleChangeCheckboxSavedMovies,
 }) {
   const location = useLocation();
   // const [movieName, setMovieName] = useState('');
@@ -56,12 +57,23 @@ export default function SearchForm({
     }
   };
 
+  const handleCheckboxState = () => {
+    if (location.pathname === '/movies') {
+      return checkboxState;
+    }
+    if (location.pathname === '/saved-movies') {
+      return checkboxStateSavedMovies;
+    }
+  };
+
   return (
-    <form className='search-form' onSubmit={handleSubmit}>
+    <form className='search-form' onSubmit={handleSubmit} noValidate>
       <input
         type='text'
         className='search-form__input'
-        value={movieName}
+        value={
+          location.pathname === '/movies' ? movieName : movieNameSavedMovies
+        }
         onChange={changeMovieName}
         required
         placeholder='Фильм'
@@ -71,8 +83,11 @@ export default function SearchForm({
       </button>
       <FilterCheckbox
         handleChangeCheckbox={changeCheckbox}
-        checkboxState={checkboxState}
-        handleClickCheckbox={handleClickCheckbox}
+        checkboxState={
+          location.pathname === '/movies'
+            ? checkboxState
+            : checkboxStateSavedMovies
+        }
       />
     </form>
   );
