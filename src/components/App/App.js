@@ -16,6 +16,8 @@ import * as moviesApi from '../../utils/MoviesApi';
 import * as mainApi from '../../utils/MainApi';
 import * as auth from '../../utils/auth';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { ProtectedRoute } from '../ProtectedRoure/ProtectedRoute';
+import Popup from '../Popup/Popup';
 
 function App() {
   const [isNavigatePopupOpen, setNavigatePopup] = useState(false);
@@ -38,6 +40,10 @@ function App() {
   const [addMoviesLength, setAddMoviesLength] = useState(3);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [profileMessage, setProfileMessage] = useState('');
+  const [isReductOpen, setReductOpen] = useState(false);
+  // const [profileButtonSave, setProfileButtonSave] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -52,7 +58,7 @@ function App() {
           'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.',
         );
       })
-      .finally(() => setTimeout(() => setIsLoading(true), 800));
+      .finally(() => setTimeout(() => setIsLoading(false), 800));
   }, []);
 
   useEffect(() => {
@@ -79,15 +85,12 @@ function App() {
     if (width > 1160) {
       setAddMoviesLength(3);
       setMoviesListLength(12);
-      console.log('full');
     } else if (width <= 1160 && width >= 731) {
       setAddMoviesLength(2);
       setMoviesListLength(8);
-      console.log('meedle');
     } else if (width < 731) {
       setAddMoviesLength(2);
       setMoviesListLength(5);
-      console.log('small');
     }
   }, [width]);
 
@@ -123,8 +126,6 @@ function App() {
         .checkToken(token)
         .then((userInfo) => {
           setCurrentUser(userInfo);
-          //setMovies(initialCards);
-          console.log(userInfo);
         })
         .catch((err) => console.log(err));
     } else {
@@ -137,13 +138,16 @@ function App() {
       mainApi
         .getMovies(token)
         .then((movies) => {
-          console.log(movies);
           const mySavedMovies = movies.filter(
             (movie) => movie.owner.toString() === currentUser._id.toString(),
           );
           setSavedMovies(mySavedMovies);
+          setMessage('');
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setMessage('Что-то пошло не так.');
+          console.log(err);
+        });
     }
   }, [currentUser]);
 
@@ -152,9 +156,7 @@ function App() {
   };
 
   const handleNavigatePopupOpen = () => setNavigatePopup(true);
-
   const closeAllPopups = () => setNavigatePopup(false);
-
   const addInSavedMovies = (movie) => {
     mainApi
       .getMovies(token)
@@ -164,8 +166,12 @@ function App() {
           (movie) => movie.owner.toString() === currentUser._id.toString(),
         );
         setSavedMovies(mySavedMovies);
+        setMessage('');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setMessage('Что-то пошло не так.');
+        console.log(err);
+      });
   };
 
   const filterMovies = () => {
@@ -214,7 +220,7 @@ function App() {
   };
 
   const handleSearchMovies = (text, checkboxState) => {
-    setIsLoading(true)
+    setIsLoading(true);
     localStorage.removeItem('view-movies');
     const moviesList = checkboxState
       ? {
@@ -231,11 +237,9 @@ function App() {
             item.nameRU.toLowerCase().includes(text),
           ),
         };
-    console.log(moviesList);
-
     setFindedMovies(moviesList);
     localStorage.setItem('finded-movies', JSON.stringify(moviesList));
-    setTimeout(() => setIsLoading(false), 400)
+    setTimeout(() => setIsLoading(false), 400);
   };
 
   const handleDeleteButtonStatusLocal = (movieId, moviesList) => {
@@ -269,16 +273,14 @@ function App() {
     mainApi
       .delMovie(id, token)
       .then((movie) => {
-        mainApi
-          .getMovies(token)
-          .then((movies) => {
-            console.log(movies);
-            const mySavedMovies = movies.filter(
-              (movie) => movie.owner.toString() === currentUser._id.toString(),
-            );
-            setSavedMovies(mySavedMovies);
-          })
-          .catch((err) => console.log(err));
+        mainApi.getMovies(token).then((movies) => {
+          console.log(movies);
+          const mySavedMovies = movies.filter(
+            (movie) => movie.owner.toString() === currentUser._id.toString(),
+          );
+          setSavedMovies(mySavedMovies);
+        });
+
         localStorage.setItem(
           'view-movies',
           JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
@@ -326,11 +328,12 @@ function App() {
 
           setFindedMovies(() => handleDeleteButtonStatus(movieId, moviesList));
         }
-
-        console.log(movie);
-        // setPreSavedMovies([]);
+        setMessage('');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setMessage('Что-то пошло не так.');
+        console.log(err);
+      });
   };
 
   const handleRegister = (name, email, password) => {
@@ -358,13 +361,45 @@ function App() {
           setToken(data.token);
           setEmail(email);
           setLoggedIn(true);
-          history.push('/');
+          history.push('/movies');
         }
       })
       .catch((err) => {
         console.log(err);
         setErrorMessage('Что-то пошло не так! Попробуйте ещё раз.');
       });
+  };
+
+  const updateProfile = (data) => {
+    mainApi
+      .updateUserInfo(token, data)
+      .then((newUserData) => {
+        setCurrentUser(newUserData);
+        setPopupMessage('Профиль изменён успешно.');
+        setProfileMessage('');
+        handleReductOpen();
+      })
+      .catch((err) => {
+        if (err === 409) {
+          setProfileMessage('Пользователь с таким email уже существует.');
+        } else setProfileMessage('При обновлении профиля произошла ошибка.');
+      });
+  };
+
+  const handleReductOpen = () => {
+    setReductOpen(!isReductOpen);
+  };
+
+  const resetProfileMessage = () => {
+    setProfileMessage('');
+  };
+
+  const handleSetMessage = (val) => {
+    setMessage(val);
+  };
+
+  const handlePopupClick = () => {
+    setPopupMessage('');
   };
 
   const handleLogout = () => {
@@ -377,7 +412,6 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      {/* {isLoading && <Preloader />} */}
       <div className='App'>
         <Switch>
           <Route exact path='/'>
@@ -397,7 +431,9 @@ function App() {
               path={'movies'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <Movies
+            <ProtectedRoute
+              path='/movies'
+              component={Movies}
               handleSearchMovies={handleSearchMovies}
               handleDeleteMovie={handleDeleteMovie}
               addInSavedMovies={addInSavedMovies}
@@ -408,6 +444,8 @@ function App() {
               addMoviesLength={addMoviesLength}
               isLoading={isLoading}
               message={message}
+              handleSetMessage={handleSetMessage}
+              header={Header}
             />
             <Footer />
           </Route>
@@ -418,7 +456,8 @@ function App() {
               path={'saved-movies'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <SavedMovies
+            <ProtectedRoute
+              component={SavedMovies}
               movies={savedMovies}
               handleDeleteMovie={handleDeleteMovie}
             />
@@ -431,7 +470,15 @@ function App() {
               path={'profile'}
               onNavigate={handleNavigatePopupOpen}
             />
-            <Profile handleLogout={handleLogout} />
+            <ProtectedRoute
+              component={Profile}
+              handleLogout={handleLogout}
+              updateProfile={updateProfile}
+              profileMessage={profileMessage}
+              resetProfileMessage={resetProfileMessage}
+              isReductOpen={isReductOpen}
+              handleReductOpen={handleReductOpen}
+            />
           </Route>
 
           <Route path='/signin'>
@@ -446,6 +493,7 @@ function App() {
             <NotFound />
           </Route>
         </Switch>
+        <Popup message={popupMessage} onClick={handlePopupClick} />
 
         <NavigatePopup isOpen={isNavigatePopupOpen} onClose={closeAllPopups} />
       </div>

@@ -15,12 +15,13 @@ export default function Movies({
   addMoviesLength,
   isLoading,
   message,
+  handleSetMessage,
 }) {
   const [viewMoviesList, setViewMoviesList] = useState(
     JSON.parse(localStorage.getItem('view-movies')) || [],
   );
   const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
-  const [checkboxState, setCheckboxState] = useState(false);
+  const [checkboxState, setCheckboxState] = useState(localStorage.getItem('checkbox') === 'true');
   const [movieName, setMovieName] = useState(
     localStorage.getItem('movie-name') || '',
   );
@@ -47,8 +48,6 @@ export default function Movies({
       }
     }
   }, [movies]);
-
-
 
   useEffect(() => {
     console.log(findedMovies.movies);
@@ -100,7 +99,7 @@ export default function Movies({
   }, [viewMoviesList]);
 
   useEffect(() => {
-    if(movies.length && viewMoviesList.length){
+    if (movies.length && viewMoviesList.length) {
       handleSearchMovies(movieName.toLowerCase(), checkboxState);
     }
   }, [moviesListLength]);
@@ -202,11 +201,10 @@ export default function Movies({
   const handleSubmitSearchForm = () => {
     handleSearchMovies(movieName.toLowerCase(), checkboxState);
     localStorage.setItem('movie-name', movieName);
-    console.log(movieName);
+
   };
   const changeSaveButtonStatus = (movie, movieList = viewMoviesList) => {
-    console.log(movieList);
-    console.log(viewMoviesList);
+
     return movieList.map((m) =>
       m.id === movie.movieId ? { buttonStatusSave: true, ...m } : m,
     );
@@ -225,7 +223,7 @@ export default function Movies({
           JSON.stringify(changeSaveButtonStatus(movie)),
         );
         if (findedMovies.movies?.length) {
-          console.log('сохранил найденое');
+
           localStorage.setItem(
             'finded-movies',
             JSON.stringify({
@@ -234,7 +232,7 @@ export default function Movies({
           );
         }
         if (findedMovies.filterMovies?.length) {
-          console.log('сохранил фильтрованое');
+
           localStorage.setItem(
             'finded-movies',
             JSON.stringify({
@@ -251,8 +249,12 @@ export default function Movies({
         setViewMoviesList(() => changeSaveButtonStatus(movie));
 
         addInSavedMovies(movie);
+        handleSetMessage('');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        handleSetMessage('Что-то пошло не так.');
+        console.log(err);
+      });
   };
 
   return (

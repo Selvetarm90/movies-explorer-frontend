@@ -1,43 +1,74 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { FormValidation } from '../../utils/FormValidation';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 
-export default function Profile({ handleLogout }) {
-  const [isReductOpen, setReductOpen] = useState(false);
-  const [name, setName] = useState('Андрей Воробей');
-  const [email, setEmail] = useState('andrey@ya.ru');
+export default function Profile({
+  handleLogout,
+  updateProfile,
+  profileMessage,
+  resetProfileMessage,
+  isReductOpen,
+  handleReductOpen
+}) {
+
+  // const [name, setName] = useState('');
+  // const [email, setEmail] = useState('');
   const [errorReduct, setErrorReduct] = useState('');
 
-  const handleReduct = () => {
-    setReductOpen(!isReductOpen);
+  const currentUser = useContext(CurrentUserContext);
+  const { handleChange, values, errors, isValid, resetInputs } = FormValidation(
+    { resetProfileMessage },
+  );
+
+  useEffect(() => {
+    if (currentUser.name) {
+      console.log(currentUser);
+      const { name, email } = currentUser;
+      console.log(name);
+      console.log(email);
+      resetInputs(true, { name, email }, {});
+    }
+  }, [currentUser, resetInputs]);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    updateProfile(values);
   };
 
-  const handleChangeName = (evt) => {
-    setName(evt.target.value);
-  };
-
-  const handleChangeEmail = (evt) => {
-    setEmail(evt.target.value);
-  };
-
-  const handleErrorReduct = () => {
-    setErrorReduct('Ошибка!');
-  };
+  // const handleReduct = () => {
+  //   setReductOpen(!isReductOpen);
+  // };
 
   const handleClickLogout = () => {
     handleLogout();
   };
 
+
+  const checkFormValid =
+    !isValid ||
+    (currentUser.email === values.email && currentUser.name === values.name) ||
+    profileMessage;
+
   return (
     <main className='profile'>
-      <h2 className='profile__heading'>Привет, Андрей!</h2>
-      <form className='form'>
+      <h2 className='profile__heading'>{`Привет, ${
+        currentUser.name || ''
+      }!`}</h2>
+      <form className='form' onSubmit={handleSubmit}>
         <label className='form__label'>
           <span className='form__placeholder'>Имя</span>
           <input
             type='text'
-            className='form__input'
-            value={name}
-            onChange={handleChangeName}
+            name='name'
+            minLength='2'
+            maxLength='30'
+            required
+            placeholder='Имя'
+            className={`form__input ${errors.name ? 'form__input_error' : ''}`}
+            value={values.name}
+            onChange={handleChange}
             disabled={!isReductOpen}
           />
         </label>
@@ -46,19 +77,35 @@ export default function Profile({ handleLogout }) {
           <span className='form__placeholder'>E-mail</span>
           <input
             type='email'
-            className='form__input'
-            value={email}
-            onChange={handleChangeEmail}
+            name='email'
+            className={`form__input ${errors.email ? 'form__input_error' : ''}`}
+            value={values.email}
+            onChange={handleChange}
             disabled={!isReductOpen}
+            placeholder='Почта'
           />
         </label>
+        <span
+          className={`profile__error ${!isReductOpen && 'profile__error_none'}`}
+        >
+          {errors.name || errors.email || profileMessage || ''}
+        </span>
+        <button
+          type='submit'
+          disabled={checkFormValid}
+          className={`profile__button profile__button-save ${
+            !isReductOpen ? 'profile__button_none' : ''
+          } }`}
+        >
+          Сохранить
+        </button>
       </form>
       <button
         type='button'
         className={`profile__button ${
           isReductOpen ? 'profile__button_none' : ''
         }`}
-        onClick={handleReduct}
+        onClick={handleReductOpen}
       >
         Редактировать
       </button>
@@ -70,22 +117,6 @@ export default function Profile({ handleLogout }) {
         }`}
       >
         Выйти из аккаунта
-      </button>
-      <span
-        className={`profile__error ${
-          !errorReduct ? 'profile__error_none' : ''
-        }`}
-      >
-        {errorReduct}
-      </span>
-      <button
-        type='submit'
-        onClick={handleErrorReduct}
-        className={`profile__button profile__button-save ${
-          !isReductOpen ? 'profile__button_none' : ''
-        } ${errorReduct ? 'profile__button-save_unactive' : ''}`}
-      >
-        Сохранить
       </button>
     </main>
   );

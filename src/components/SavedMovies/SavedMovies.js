@@ -14,16 +14,16 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
   );
 
   useEffect(() => {
-    if (movies.length) {
+
       searchSavedMovies(checkboxStateSavedMovies);
-    }
+
   }, [movies]);
 
   const searchSavedMovies = (checked = checkboxStateSavedMovies) => {
     localStorage.setItem('saved-movie-name', movieNameSavedMovies);
     localStorage.setItem('saved-movies-checkbox', checked);
     console.log(movieNameSavedMovies);
-    let text = movieNameSavedMovies === '' ? '' : movieNameSavedMovies;
+    let text = movieNameSavedMovies === '' ? '' : movieNameSavedMovies.toLowerCase();
     if (checked) {
       const moviesList = movies.filter(
         (m) => m.nameRU.toLowerCase().includes(text) && m.duration < 40,
