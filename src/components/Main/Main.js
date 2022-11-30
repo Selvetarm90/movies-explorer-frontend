@@ -1,13 +1,12 @@
-import './Main.css'
+import './Main.css';
 import AboutMe from './AboutMe/AboutMe';
 import AboutProject from './AboutProject/AboutProject';
 import Promo from './Promo/Promo';
 import Techs from './Techs/Techs';
 import Portfolio from './Portfolio/Portfolio';
 
-
 export default function Main() {
-  return(
+  return (
     <main className='main'>
       <Promo />
       <AboutProject />
@@ -15,5 +14,5 @@ export default function Main() {
       <AboutMe />
       <Portfolio />
     </main>
-  )
+  );
 }

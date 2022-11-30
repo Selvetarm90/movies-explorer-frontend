@@ -1,14 +1,10 @@
-import { useContext } from 'react';
 import './MoviesCard.css';
-import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
 export default function MoviesCard({
   handleSaveMovie,
   handleDeleteMovie,
   ...props
 }) {
-  const currentUser = useContext(CurrentUserContext);
-
   const handleClick = () => {
     if (!props.movie.buttonStatusSave) {
       handleSaveMovie({
@@ -20,15 +16,12 @@ export default function MoviesCard({
         image: `https://api.nomoreparties.co${props.movie.image.url}`,
         trailerLink: props.movie.trailerLink,
         thumbnail: `https://api.nomoreparties.co${props.movie.image.formats.thumbnail.url}`,
-        // owner: currentUser._id,
         movieId: props.movie.id,
         nameRU: props.movie.nameRU,
         nameEN: props.movie.nameEN,
       });
     }
     if (props.movie.buttonStatusSave) {
-      console.log(props.movie);
-      console.log(props.movies);
       handleDeleteMovie('', props.movie.id);
     }
   };
@@ -42,6 +35,7 @@ export default function MoviesCard({
       <h2 className='card__name'>{props.movie.nameRU}</h2>
       <p className='card__duration'>{`${props.movie.duration} минут`}</p>
       <a
+        className='card__link'
         href={props.movie.trailerLink || 'https://www.youtube.com'}
         target='_blank'
         rel='noreferrer'

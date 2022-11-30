@@ -1,9 +1,9 @@
 import Heading from '../Heading/Heading';
-import './AboutProject.css'
+import './AboutProject.css';
 export default function AboutProject() {
   return (
     <section className='about'>
-      <Heading text='О проекте' id='about-project'/>
+      <Heading text='О проекте' id='about-project' />
       <div className='description'>
         <h2 className='description__heading'>
           Дипломный проект включал 5 этапов
@@ -22,13 +22,13 @@ export default function AboutProject() {
           соблюдать, чтобы успешно защититься.
         </p>
       </div>
-      <div className="diagram">
-        <p className="diagram diagram_first">1 неделя</p>
-        <p className="diagram diagram_second">4 недели</p>
+      <div className='diagram'>
+        <p className='diagram diagram_first'>1 неделя</p>
+        <p className='diagram diagram_second'>4 недели</p>
       </div>
-      <div className="diagram diagram_sign">
-        <p className="diagram diagram_sign-el diagram_first">Back-end</p>
-        <p className="diagram diagram_sign-el diagram_second">Front-end</p>
+      <div className='diagram diagram_sign'>
+        <p className='diagram diagram_sign-el diagram_first'>Back-end</p>
+        <p className='diagram diagram_sign-el diagram_second'>Front-end</p>
       </div>
     </section>
   );

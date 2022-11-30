@@ -41,6 +41,11 @@
   height: 200px;
 }
 
+.card__link {
+  width: 100%;
+  height: 200px;
+}
+
 .card__button {
   margin: 18px auto;
   border: none;
@@ -86,6 +91,10 @@
   .card__image {
     height: 190px;
   }
+
+  .card__link {
+    height: 190px;
+  }
 }
 
 @media (max-width: 400px) {
@@ -95,6 +104,10 @@
   }
 
   .card__image {
+    height: 168px;
+  }
+
+  .card__link {
     height: 168px;
   }
 

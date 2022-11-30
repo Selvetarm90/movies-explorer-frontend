@@ -29,10 +29,11 @@ export default function MoviesCardList({
 
   return (
     <section
-
-      className={`cards${props.moviesList.length && !props.message ? '' : '__not-found'}`}
+      className={`cards${
+        props.moviesList.length && !props.message ? '' : '__not-found'
+      }`}
     >
-      {props.isLoading && <Preloader/>}
+      {props.isLoading && <Preloader />}
       <HandleMoviesList />
     </section>
   );

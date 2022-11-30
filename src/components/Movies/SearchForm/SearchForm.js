@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import './SearchForm.css';
@@ -20,7 +19,6 @@ export default function SearchForm({
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log(location.pathname);
     if (location.pathname === '/movies') {
       handleSubmitSearchForm();
       return;
@@ -60,7 +58,11 @@ export default function SearchForm({
         required
         placeholder='Фильм'
       />
-      <button className='search-form__button' type='submit' disabled={isLoading}>
+      <button
+        className='search-form__button'
+        type='submit'
+        disabled={isLoading}
+      >
         Найти
       </button>
       <FilterCheckbox

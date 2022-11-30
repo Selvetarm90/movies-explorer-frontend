@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react';
 import './FilterCheckbox.css';
 
-export default function FilterCheckbox({ handleChangeCheckbox, checkboxState }) {
+export default function FilterCheckbox({
+  handleChangeCheckbox,
+  checkboxState,
+}) {
   return (
     <div className='filter-checkbox'>
       <input

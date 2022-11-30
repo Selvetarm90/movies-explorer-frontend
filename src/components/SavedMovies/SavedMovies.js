@@ -20,7 +20,6 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
   const searchSavedMovies = (checked = checkboxStateSavedMovies) => {
     localStorage.setItem('saved-movie-name', movieNameSavedMovies);
     localStorage.setItem('saved-movies-checkbox', checked);
-    console.log(movieNameSavedMovies);
     let text =
       movieNameSavedMovies === '' ? '' : movieNameSavedMovies.toLowerCase();
     if (checked) {
@@ -31,8 +30,6 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
           m.duration < 40,
       );
       setShortSavedMovies(moviesList);
-      //localStorage.setItem('saved-movies-short', shortSavedMovies);
-      console.log(moviesList);
     } else {
       const moviesList = movies.filter(
         (m) =>
@@ -40,8 +37,6 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
           m.nameEN.toLowerCase().includes(text),
       );
       setFilteredSavedMovies(moviesList);
-      //localStorage.setItem('saved-movies-finded', filteredSavedMovies);
-      console.log(moviesList);
     }
   };
 
@@ -52,7 +47,6 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
 
   const changeMovieNameSavedMovies = (text) => {
     setMovieNameSavedMovies(text);
-    //searchSavedMovies();
   };
 
   return (

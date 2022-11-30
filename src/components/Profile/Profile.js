@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { FormValidation } from '../../utils/FormValidation';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
@@ -17,10 +17,7 @@ export default function Profile({
 
   useEffect(() => {
     if (currentUser.name) {
-      console.log(currentUser);
       const { name, email } = currentUser;
-      console.log(name);
-      console.log(email);
       resetInputs(true, { name, email }, {});
     }
   }, [currentUser, resetInputs]);

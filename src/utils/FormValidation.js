@@ -1,7 +1,7 @@
 import validator from 'validator';
 import { useCallback, useState } from 'react';
 
-export function FormValidation( resetMessage  ) {
+export function FormValidation(resetMessage) {
   const [isValid, setIsValid] = useState(false);
   const [values, setValues] = useState({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState({ name: '', email: '', password: '' });

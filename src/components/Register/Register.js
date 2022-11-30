@@ -1,9 +1,13 @@
 import './Register.css';
 import { Link } from 'react-router-dom';
 import { FormValidation } from '../../utils/FormValidation';
-export default function Register({ handleRegister, registerMessage, resetRegisterMessage }) {
-
-  const { handleChange, values, errors, isValid } = FormValidation(resetRegisterMessage);
+export default function Register({
+  handleRegister,
+  registerMessage,
+  resetRegisterMessage,
+}) {
+  const { handleChange, values, errors, isValid } =
+    FormValidation(resetRegisterMessage);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
