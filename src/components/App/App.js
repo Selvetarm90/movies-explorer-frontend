@@ -226,15 +226,19 @@ function App() {
       ? {
           filterMovies: movies.filter(
             (item) =>
-              item.nameRU.toLowerCase().includes(text) && item.duration < 40,
+              (item.nameRU.toLowerCase().includes(text) ||
+                item.nameEN.toLowerCase().includes(text)) &&
+              item.duration < 40,
           ),
           movies: movies.filter((item) =>
-            item.nameRU.toLowerCase().includes(text),
+            item.nameRU.toLowerCase().includes(text) ||
+            item.nameEN.toLowerCase().includes(text),
           ),
         }
       : {
           movies: movies.filter((item) =>
-            item.nameRU.toLowerCase().includes(text),
+            item.nameRU.toLowerCase().includes(text) ||
+            item.nameEN.toLowerCase().includes(text),
           ),
         };
     setFindedMovies(moviesList);

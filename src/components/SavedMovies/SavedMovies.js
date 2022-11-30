@@ -14,26 +14,30 @@ export default function SavedMovies({ movies, handleDeleteMovie }) {
   );
 
   useEffect(() => {
-
-      searchSavedMovies(checkboxStateSavedMovies);
-
+    searchSavedMovies(checkboxStateSavedMovies);
   }, [movies]);
 
   const searchSavedMovies = (checked = checkboxStateSavedMovies) => {
     localStorage.setItem('saved-movie-name', movieNameSavedMovies);
     localStorage.setItem('saved-movies-checkbox', checked);
     console.log(movieNameSavedMovies);
-    let text = movieNameSavedMovies === '' ? '' : movieNameSavedMovies.toLowerCase();
+    let text =
+      movieNameSavedMovies === '' ? '' : movieNameSavedMovies.toLowerCase();
     if (checked) {
       const moviesList = movies.filter(
-        (m) => m.nameRU.toLowerCase().includes(text) && m.duration < 40,
+        (m) =>
+          (m.nameRU.toLowerCase().includes(text) ||
+            m.nameEN.toLowerCase().includes(text)) &&
+          m.duration < 40,
       );
       setShortSavedMovies(moviesList);
       //localStorage.setItem('saved-movies-short', shortSavedMovies);
       console.log(moviesList);
     } else {
-      const moviesList = movies.filter((m) =>
-        m.nameRU.toLowerCase().includes(text),
+      const moviesList = movies.filter(
+        (m) =>
+          m.nameRU.toLowerCase().includes(text) ||
+          m.nameEN.toLowerCase().includes(text),
       );
       setFilteredSavedMovies(moviesList);
       //localStorage.setItem('saved-movies-finded', filteredSavedMovies);
