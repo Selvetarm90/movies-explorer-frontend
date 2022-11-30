@@ -1,10 +1,10 @@
 import validator from 'validator';
 import { useCallback, useState } from 'react';
 
-export function FormValidation({ resetProfileMessage }) {
+export function FormValidation( resetMessage  ) {
   const [isValid, setIsValid] = useState(false);
-  const [values, setValues] = useState({ name: '', email: '' });
-  const [errors, setErrors] = useState({ name: '', email: '' });
+  const [values, setValues] = useState({ name: '', email: '', password: '' });
+  const [errors, setErrors] = useState({ name: '', email: '', password: '' });
 
   const validEmail = (target, name, value) => {
     setIsValid(
@@ -23,7 +23,13 @@ export function FormValidation({ resetProfileMessage }) {
     const name = evt.target.name;
     const value = evt.target.value;
     if (evt.target.closest('input').className === 'form__input ') {
-      resetProfileMessage();
+      resetMessage();
+    }
+    if (evt.target.closest('input').className === 'form-register__input ') {
+      resetMessage();
+    }
+    if (evt.target.closest('input').className === 'form-register__input') {
+      resetMessage();
     }
     if (name === 'email') {
       validEmail(evt.target, name, value);

@@ -6,7 +6,6 @@ import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import Profile from '../Profile/Profile';
-import Preloader from '../Preloader/Preloader';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
@@ -24,16 +23,13 @@ function App() {
   const [initialCards, setInitialCards] = useState([]);
   const [movies, setMovies] = useState([]);
   const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
-
   const [findedMovies, setFindedMovies] = useState(
     savedFindedMovies ? savedFindedMovies : [],
   );
   const [savedMovies, setSavedMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const history = useHistory();
   const [width, setWidth] = useState(window.innerWidth);
   const [moviesListLength, setMoviesListLength] = useState(12);
@@ -43,7 +39,8 @@ function App() {
   const [popupMessage, setPopupMessage] = useState('');
   const [profileMessage, setProfileMessage] = useState('');
   const [isReductOpen, setReductOpen] = useState(false);
-  // const [profileButtonSave, setProfileButtonSave] = useState(false);
+  const [registerMessage, setRegisterMessage] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -74,10 +71,14 @@ function App() {
         .then((data) => {
           if (data) {
             setLoggedIn(true);
-            setEmail(data.email);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setPopupMessage(
+            'При авторизации произошла ошибка. Токен не передан или передан не в том формате',
+          );
+          console.log(err);
+        });
     }
   }, []);
 
@@ -95,10 +96,7 @@ function App() {
   }, [width]);
 
   useEffect(() => {
-    console.log(savedMovies);
     if (initialCards.length) {
-      console.log(initialCards);
-      console.log(savedMovies);
       if (!savedMovies.length) {
         setMovies(initialCards);
         return;
@@ -127,8 +125,12 @@ function App() {
         .then((userInfo) => {
           setCurrentUser(userInfo);
         })
-        .catch((err) => console.log(err));
-    } else {
+        .catch((err) => {
+          setPopupMessage(
+            'При авторизации произошла ошибка. Токен не передан или передан не в том формате',
+          );
+          console.log(err);
+        });
     }
   }, [loggedIn]);
 
@@ -161,7 +163,6 @@ function App() {
     mainApi
       .getMovies(token)
       .then((movies) => {
-        console.log(movies);
         const mySavedMovies = movies.filter(
           (movie) => movie.owner.toString() === currentUser._id.toString(),
         );
@@ -176,7 +177,6 @@ function App() {
 
   const filterMovies = () => {
     const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
-    console.log(savedFindedMovies);
     if (savedFindedMovies?.movies || savedFindedMovies) {
       const movieList = savedFindedMovies.movies
         ? savedFindedMovies.movies
@@ -246,8 +246,6 @@ function App() {
     if (!moviesList) {
       moviesList = JSON.parse(localStorage.getItem('view-movies'));
     }
-
-    console.log(moviesList);
     return moviesList.map((m) => {
       if (m.id === movieId) {
         delete m.buttonStatusSave;
@@ -274,7 +272,6 @@ function App() {
       .delMovie(id, token)
       .then((movie) => {
         mainApi.getMovies(token).then((movies) => {
-          console.log(movies);
           const mySavedMovies = movies.filter(
             (movie) => movie.owner.toString() === currentUser._id.toString(),
           );
@@ -285,8 +282,6 @@ function App() {
           'view-movies',
           JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
         );
-        console.log(findedMovies);
-        console.log(savedFindedMovies);
         if (
           findedMovies?.filtermovies ||
           findedMovies?.movies ||
@@ -308,8 +303,6 @@ function App() {
             ),
           );
         }
-
-        console.log(JSON.parse(localStorage.getItem('view-movies')));
         setMovies(() => handleDeleteButtonStatus(movieId));
 
         if (
@@ -336,37 +329,45 @@ function App() {
       });
   };
 
-  const handleRegister = (name, email, password) => {
+  const handleRegister = (data) => {
+    const { name, email, password } = data;
     auth
       .register(name, email, password)
       .then((data) => {
         if (data) {
-          setErrorMessage('');
-
-          history.push('/signin');
+          const message = 'Вы успешно зарегистрировались.';
+          handleLogin({ email, password }, message);
+          // setPopupMessage('Вы успешно зарегистрировались.');
+          // history.push('/signin');
         }
       })
       .catch((err) => {
         console.log(err);
-        setErrorMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        if (err === 409) {
+          setRegisterMessage('Пользователь с таким email уже существует.');
+        } else
+          setRegisterMessage('При регистрации пользователя произошла ошибка.');
       });
   };
 
-  const handleLogin = (email, password) => {
+  const handleLogin = (data, message = 'Вы успешно авторизовались.') => {
+    const { email, password } = data;
     auth
       .login(email, password)
       .then((data) => {
         if (data) {
           localStorage.setItem('jwt', data.token);
           setToken(data.token);
-          setEmail(email);
           setLoggedIn(true);
+          setPopupMessage(message);
           history.push('/movies');
         }
       })
       .catch((err) => {
         console.log(err);
-        setErrorMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        if (err === 401) {
+          setLoginMessage('Вы ввели неправильный логин или пароль.');
+        } else setLoginMessage('При авторизации произошла ошибка');
       });
   };
 
@@ -394,6 +395,14 @@ function App() {
     setProfileMessage('');
   };
 
+  const resetRegisterMessage = () => {
+    setRegisterMessage('');
+  };
+
+  const resetLoginMessage = () => {
+    setLoginMessage('');
+  };
+
   const handleSetMessage = (val) => {
     setMessage(val);
   };
@@ -405,7 +414,6 @@ function App() {
   const handleLogout = () => {
     localStorage.clear();
     setToken('');
-    setEmail('');
     setLoggedIn(false);
     history.push('/');
   };
@@ -445,7 +453,6 @@ function App() {
               isLoading={isLoading}
               message={message}
               handleSetMessage={handleSetMessage}
-              header={Header}
             />
             <Footer />
           </Route>
@@ -482,11 +489,19 @@ function App() {
           </Route>
 
           <Route path='/signin'>
-            <Login handleLogin={handleLogin} />
+            <Login
+              handleLogin={handleLogin}
+              resetLoginMessage={resetLoginMessage}
+              loginMessage={loginMessage}
+            />
           </Route>
 
           <Route path='/signup'>
-            <Register handleRegister={handleRegister} />
+            <Register
+              handleRegister={handleRegister}
+              registerMessage={registerMessage}
+              resetRegisterMessage={resetRegisterMessage}
+            />
           </Route>
 
           <Route path='*'>

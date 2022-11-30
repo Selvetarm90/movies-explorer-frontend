@@ -9,17 +9,11 @@ export default function Profile({
   profileMessage,
   resetProfileMessage,
   isReductOpen,
-  handleReductOpen
+  handleReductOpen,
 }) {
-
-  // const [name, setName] = useState('');
-  // const [email, setEmail] = useState('');
-  const [errorReduct, setErrorReduct] = useState('');
-
   const currentUser = useContext(CurrentUserContext);
-  const { handleChange, values, errors, isValid, resetInputs } = FormValidation(
-    { resetProfileMessage },
-  );
+  const { handleChange, values, errors, isValid, resetInputs } =
+    FormValidation(resetProfileMessage);
 
   useEffect(() => {
     if (currentUser.name) {
@@ -37,14 +31,9 @@ export default function Profile({
     updateProfile(values);
   };
 
-  // const handleReduct = () => {
-  //   setReductOpen(!isReductOpen);
-  // };
-
   const handleClickLogout = () => {
     handleLogout();
   };
-
 
   const checkFormValid =
     !isValid ||

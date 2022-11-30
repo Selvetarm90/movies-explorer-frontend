@@ -32,8 +32,6 @@ export default function Movies({
       const savedViewMoviesList = JSON.parse(
         localStorage.getItem('view-movies'),
       );
-      console.log(savedMovieName);
-      console.log(savedViewMoviesList);
       if (savedViewMoviesList?.length) {
         setViewMoviesList(savedViewMoviesList);
         return;
@@ -42,7 +40,6 @@ export default function Movies({
         handleSearchMovies(savedMovieName.toLowerCase(), checkboxState);
         return;
       }
-
       if (movies.length) {
         startMoviesList(movies, findedMovies.movies);
       }
@@ -50,7 +47,6 @@ export default function Movies({
   }, [movies]);
 
   useEffect(() => {
-    console.log(findedMovies.movies);
     setCheckboxState(localStorage.getItem('checkbox') === 'true');
     const savedViewMoviesList = JSON.parse(localStorage.getItem('view-movies'));
     const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
@@ -64,15 +60,12 @@ export default function Movies({
     }
     if (savedViewMoviesList?.length) {
       setViewMoviesList(savedViewMoviesList);
-
-      console.log(savedViewMoviesList);
       return;
     }
     if (savedFindedMovies?.length || findedMovies.length) {
       startMoviesList(movies, findedMovies || savedFindedMovies);
       return;
     }
-
     if (savedFindedMovies?.movies || findedMovies.movies) {
       startMoviesList(movies, savedFindedMovies?.movies || findedMovies.movies);
       return;
@@ -80,8 +73,6 @@ export default function Movies({
   }, [findedMovies]);
 
   useEffect(() => {
-    console.log(findedMovies);
-    console.log(viewMoviesList);
     const moviesList = findedMovies.filterMovies
       ? findedMovies.filterMovies
       : findedMovies.movies
@@ -89,7 +80,6 @@ export default function Movies({
       : findedMovies
       ? findedMovies
       : [];
-    console.log(moviesList);
     if (
       viewMoviesList.length === movies.length ||
       viewMoviesList.length === moviesList.length
@@ -106,9 +96,7 @@ export default function Movies({
 
   const startMoviesList = (movies, findedMovies) => {
     const viewMovies = [];
-    console.log(movies);
     const savedMovieName = localStorage.getItem('movie-name');
-
     if (!movieName && !savedMovieName) {
       if (movies.length <= moviesListLength && movies.length) {
         localStorage.setItem('view-movies', JSON.stringify(movies));
@@ -117,16 +105,13 @@ export default function Movies({
         return;
       }
     }
-
     if (findedMovies?.length && findedMovies.length <= moviesListLength) {
       localStorage.setItem('view-movies', JSON.stringify(findedMovies));
       setViewMoviesList(findedMovies);
       setbuttonMoreVisible(false);
       return;
     }
-
     if (findedMovies?.length) {
-      console.log('найденные фильмы');
       for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(findedMovies[i]);
       }
@@ -135,16 +120,11 @@ export default function Movies({
       return;
     }
     if (findedMovies && !findedMovies?.length) {
-      console.log('нету!!');
       setViewMoviesList([]);
       localStorage.removeItem('view-movies');
-
       return;
     }
-
     if (movies.length) {
-      console.log(movies);
-      console.log(viewMovies);
       for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(movies[i]);
       }
@@ -167,18 +147,15 @@ export default function Movies({
       i <= viewMoviesList.length + addMoviesLength - 1;
       i++
     ) {
-      console.log(viewMoviesList.length);
       if (handleMovies[i]) {
         addedMovies.push(handleMovies[i]);
       }
     }
-    console.log(addedMovies);
-    console.log(viewMoviesList);
+
     localStorage.setItem(
       'view-movies',
       JSON.stringify(viewMoviesList.concat(addedMovies)),
     );
-    console.log(JSON.parse(localStorage.getItem('view-movies')));
     setViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
@@ -190,8 +167,6 @@ export default function Movies({
     } else {
       handleSearchMovies(movieName.toLowerCase(), false);
     }
-
-    console.log(checkboxState);
   };
 
   const handleChangeMovieName = (value) => {
@@ -216,8 +191,6 @@ export default function Movies({
     mainApi
       .addMovie(data, token)
       .then((movie) => {
-        console.log(movie);
-
         localStorage.setItem(
           'view-movies',
           JSON.stringify(changeSaveButtonStatus(movie)),
@@ -243,9 +216,6 @@ export default function Movies({
             }),
           );
         }
-
-        console.log(JSON.parse(localStorage.getItem('view-movies')));
-
         setViewMoviesList(() => changeSaveButtonStatus(movie));
 
         addInSavedMovies(movie);

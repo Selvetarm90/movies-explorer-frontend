@@ -1,68 +1,74 @@
 import './Register.css';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-export default function Register({ handleRegister }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+import { FormValidation } from '../../utils/FormValidation';
+export default function Register({ handleRegister, registerMessage, resetRegisterMessage }) {
 
-  const handleChangeName = (evt) => {
-    setName(evt.target.value);
-  };
-
-  const handleChangeEmail = (evt) => {
-    setEmail(evt.target.value);
-  };
-
-  const handleChangePassword = (evt) => {
-    setPassword(evt.target.value);
-  };
+  const { handleChange, values, errors, isValid } = FormValidation(resetRegisterMessage);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    handleRegister(name, email, password);
+    handleRegister(values);
   };
 
   return (
     <main className='register'>
       <Link to='/' className='register__logo' />
       <h2 className='register__heading'>Добро пожаловать!</h2>
-      <form className='form-register' onSubmit={handleSubmit}>
+      <form className='form-register' noValidate onSubmit={handleSubmit}>
         <label className='form-register__label'>
           Имя
           <input
             type='text'
-            className='form-register__input'
+            className={`form-register__input ${
+              errors.name && 'form-register__input_error'
+            }`}
             placeholder='Имя'
-            onChange={handleChangeName}
-            value={name}
+            name='name'
+            required
+            minLength='2'
+            maxLength='30'
+            onChange={handleChange}
+            value={values.name}
           ></input>
-          <span className='form-register__error'>невалидное имя.</span>
+          <span className='form-register__error'>{errors.name}</span>
         </label>
         <label className='form-register__label'>
           E-mail
           <input
             type='email'
-            className='form-register__input'
+            name='email'
+            className={`form-register__input ${
+              errors.email && 'form-register__input_error'
+            }`}
             placeholder='E-mail'
-            onChange={handleChangeEmail}
-            value={email}
+            onChange={handleChange}
+            value={values.email}
           ></input>
-          <span className='form-register__error'>невалидная почта.</span>
+          <span className='form-register__error'>{errors.email}</span>
         </label>
         <label className='form-register__label'>
           Пароль
           <input
             type='password'
-            className='form-register__input'
+            name='password'
+            required
+            minLength='4'
+            maxLength='30'
+            className={`form-register__input ${
+              errors.password && 'form-register__input_error'
+            }`}
             placeholder='Пароль'
-            onChange={handleChangePassword}
-            value={password}
+            onChange={handleChange}
+            value={values.password}
           ></input>
-          <span className='form-register__error'>невалидный пароль.</span>
+          <span className='form-register__error'>{errors.password}</span>
         </label>
-        <span className='profile__submit-error'></span>
-        <button type='submit' className='register__button-save'>
+        <span className='profile__submit-error'>{registerMessage}</span>
+        <button
+          type='submit'
+          className='register__button-save'
+          disabled={!isValid || registerMessage}
+        >
           Зарегистрироваться
         </button>
         <p className='register__paragraph'>Уже зарегестрированы?</p>

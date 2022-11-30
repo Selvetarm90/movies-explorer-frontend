@@ -10,7 +10,6 @@ export default function MoviesCardList({
 }) {
   const HandleMoviesList = () => {
     if (props.moviesList.length > 0 && !props.message) {
-      console.log(props.moviesList);
       return props.moviesList.map((item) => (
         <MoviesCard
           handleSaveMovie={handleSaveMovie}

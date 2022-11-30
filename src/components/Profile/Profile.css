@@ -152,10 +152,21 @@
     padding-bottom: 80px;
   }
   .form {
-    margin-bottom: 379px;
+    margin-bottom: 40px;
+  }
+
+  .profile__button {
+    margin-top: 380px;
+  }
+  .profile__button_logout {
+    margin-top: 16px;
+  }
+
+  .profile__button-save {
+    margin-top: 20px;
   }
 
   .profile__error {
-    margin-top: -146px;
+    margin-top: 340px;
   }
 }
