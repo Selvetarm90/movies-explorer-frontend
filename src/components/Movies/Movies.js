@@ -16,10 +16,9 @@ export default function Movies({
   isLoading,
   message,
   handleSetMessage,
+  handleSetViewMoviesList,
+  viewMoviesList,
 }) {
-  const [viewMoviesList, setViewMoviesList] = useState(
-    JSON.parse(localStorage.getItem('view-movies')) || [],
-  );
   const [buttonMoreVisible, setbuttonMoreVisible] = useState(true);
   const [checkboxState, setCheckboxState] = useState(
     localStorage.getItem('checkbox') === 'true',
@@ -35,7 +34,7 @@ export default function Movies({
         localStorage.getItem('view-movies'),
       );
       if (savedViewMoviesList?.length) {
-        setViewMoviesList(savedViewMoviesList);
+        handleSetViewMoviesList(savedViewMoviesList);
         return;
       }
       if (savedMovieName) {
@@ -61,7 +60,7 @@ export default function Movies({
       return;
     }
     if (savedViewMoviesList?.length) {
-      setViewMoviesList(savedViewMoviesList);
+      handleSetViewMoviesList(savedViewMoviesList);
       return;
     }
     if (savedFindedMovies?.length || findedMovies.length) {
@@ -102,14 +101,14 @@ export default function Movies({
     if (!movieName && !savedMovieName) {
       if (movies.length <= moviesListLength && movies.length) {
         localStorage.setItem('view-movies', JSON.stringify(movies));
-        setViewMoviesList(movies);
+        handleSetViewMoviesList(movies);
         setbuttonMoreVisible(false);
         return;
       }
     }
     if (findedMovies?.length && findedMovies.length <= moviesListLength) {
       localStorage.setItem('view-movies', JSON.stringify(findedMovies));
-      setViewMoviesList(findedMovies);
+      handleSetViewMoviesList(findedMovies);
       setbuttonMoreVisible(false);
       return;
     }
@@ -117,12 +116,12 @@ export default function Movies({
       for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(findedMovies[i]);
       }
-      setViewMoviesList(viewMovies);
+      handleSetViewMoviesList(viewMovies);
       localStorage.setItem('view-movies', JSON.stringify(viewMovies));
       return;
     }
     if (findedMovies && !findedMovies?.length) {
-      setViewMoviesList([]);
+      handleSetViewMoviesList([]);
       localStorage.removeItem('view-movies');
       return;
     }
@@ -130,7 +129,7 @@ export default function Movies({
       for (let i = 0; i <= moviesListLength - 1; i++) {
         viewMovies.push(movies[i]);
       }
-      setViewMoviesList(viewMovies);
+      handleSetViewMoviesList(viewMovies);
     }
   };
 
@@ -158,7 +157,7 @@ export default function Movies({
       'view-movies',
       JSON.stringify(viewMoviesList.concat(addedMovies)),
     );
-    setViewMoviesList(viewMoviesList.concat(addedMovies));
+    handleSetViewMoviesList(viewMoviesList.concat(addedMovies));
   };
 
   const handleChangeCheckbox = (value) => {
@@ -214,7 +213,7 @@ export default function Movies({
             }),
           );
         }
-        setViewMoviesList(() => changeSaveButtonStatus(movie));
+        handleSetViewMoviesList(() => changeSaveButtonStatus(movie));
 
         addInSavedMovies(movie);
         handleSetMessage('');

@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Main from '../Main/Main';
@@ -17,6 +17,15 @@ import * as auth from '../../utils/auth';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { ProtectedRoute } from '../ProtectedRoure/ProtectedRoute';
 import Popup from '../Popup/Popup';
+import {
+  ADDED_CARDS_FULLSCREEN,
+  ADDED_CARDS_MOBILE,
+  ADDED_CARDS_TABLET,
+  AMOUNT_CARDS_FULLSCREEN,
+  AMOUNT_CARDS_MOBILE,
+  AMOUNT_CARDS_TABLET,
+  SHORT_MOVIES_DURATION,
+} from '../../utils/constants';
 
 function App() {
   const [isNavigatePopupOpen, setNavigatePopup] = useState(false);
@@ -25,6 +34,9 @@ function App() {
   const savedFindedMovies = JSON.parse(localStorage.getItem('finded-movies'));
   const [findedMovies, setFindedMovies] = useState(
     savedFindedMovies ? savedFindedMovies : [],
+  );
+  const [viewMoviesList, setViewMoviesList] = useState(
+    JSON.parse(localStorage.getItem('view-movies')) || [],
   );
   const [savedMovies, setSavedMovies] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -84,14 +96,14 @@ function App() {
 
   useEffect(() => {
     if (width > 1160) {
-      setAddMoviesLength(3);
-      setMoviesListLength(12);
+      setAddMoviesLength(ADDED_CARDS_FULLSCREEN);
+      setMoviesListLength(AMOUNT_CARDS_FULLSCREEN);
     } else if (width <= 1160 && width >= 731) {
-      setAddMoviesLength(2);
-      setMoviesListLength(8);
+      setAddMoviesLength(ADDED_CARDS_TABLET);
+      setMoviesListLength(AMOUNT_CARDS_TABLET);
     } else if (width < 731) {
-      setAddMoviesLength(2);
-      setMoviesListLength(5);
+      setAddMoviesLength(ADDED_CARDS_MOBILE);
+      setMoviesListLength(AMOUNT_CARDS_MOBILE);
     }
   }, [width]);
 
@@ -182,25 +194,31 @@ function App() {
         ? savedFindedMovies.movies
         : savedFindedMovies;
       setFindedMovies({
-        filterMovies: movieList.filter((item) => item.duration <= 40),
+        filterMovies: movieList.filter(
+          (item) => item.duration <= SHORT_MOVIES_DURATION,
+        ),
       });
       localStorage.setItem(
         'finded-movies',
         JSON.stringify({
-          filterMovies: movieList.filter((item) => item.duration <= 40),
+          filterMovies: movieList.filter(
+            (item) => item.duration <= SHORT_MOVIES_DURATION,
+          ),
         }),
       );
       return;
     }
     if (findedMovies?.movies) {
       setFindedMovies({
-        filterMovies: findedMovies.movies.filter((item) => item.duration <= 40),
+        filterMovies: findedMovies.movies.filter(
+          (item) => item.duration <= SHORT_MOVIES_DURATION,
+        ),
       });
       localStorage.setItem(
         'finded-movies',
         JSON.stringify({
           filterMovies: findedMovies.movies.filter(
-            (item) => item.duration <= 40,
+            (item) => item.duration <= SHORT_MOVIES_DURATION,
           ),
         }),
       );
@@ -208,12 +226,16 @@ function App() {
     }
     if (!findedMovies?.movies) {
       setFindedMovies({
-        filterMovies: movies.filter((item) => item.duration <= 40),
+        filterMovies: movies.filter(
+          (item) => item.duration <= SHORT_MOVIES_DURATION,
+        ),
       });
       localStorage.setItem(
         'finded-movies',
         JSON.stringify({
-          filterMovies: movies.filter((item) => item.duration <= 40),
+          filterMovies: movies.filter(
+            (item) => item.duration <= SHORT_MOVIES_DURATION,
+          ),
         }),
       );
     }
@@ -228,17 +250,19 @@ function App() {
             (item) =>
               (item.nameRU.toLowerCase().includes(text) ||
                 item.nameEN.toLowerCase().includes(text)) &&
-              item.duration < 40,
+              item.duration < SHORT_MOVIES_DURATION,
           ),
-          movies: movies.filter((item) =>
-            item.nameRU.toLowerCase().includes(text) ||
-            item.nameEN.toLowerCase().includes(text),
+          movies: movies.filter(
+            (item) =>
+              item.nameRU.toLowerCase().includes(text) ||
+              item.nameEN.toLowerCase().includes(text),
           ),
         }
       : {
-          movies: movies.filter((item) =>
-            item.nameRU.toLowerCase().includes(text) ||
-            item.nameEN.toLowerCase().includes(text),
+          movies: movies.filter(
+            (item) =>
+              item.nameRU.toLowerCase().includes(text) ||
+              item.nameEN.toLowerCase().includes(text),
           ),
         };
     setFindedMovies(moviesList);
@@ -281,17 +305,19 @@ function App() {
           );
           setSavedMovies(mySavedMovies);
         });
+        if (localStorage.getItem('view-movies')) {
+          localStorage.setItem(
+            'view-movies',
+            JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
+          );
+        }
 
-        localStorage.setItem(
-          'view-movies',
-          JSON.stringify(handleDeleteButtonStatusLocal(movieId)),
-        );
         if (
           findedMovies?.filtermovies ||
           findedMovies?.movies ||
           savedFindedMovies?.movies ||
           savedFindedMovies?.filterMovies ||
-          savedFindedMovies.length
+          savedFindedMovies?.length
         ) {
           localStorage.setItem(
             'finded-movies',
@@ -310,12 +336,12 @@ function App() {
         setMovies(() => handleDeleteButtonStatus(movieId));
 
         if (
-          findedMovies.filterMovies ||
-          findedMovies.movies ||
-          savedFindedMovies.filterMovies ||
-          savedFindedMovies.movies
+          findedMovies?.filterMovies ||
+          findedMovies?.movies ||
+          savedFindedMovies?.filterMovies ||
+          savedFindedMovies?.movies
         ) {
-          const moviesList = findedMovies.filterMovies
+          const moviesList = findedMovies?.filterMovies
             ? findedMovies.filterMovies
             : findedMovies.movies
             ? findedMovies.movies
@@ -341,8 +367,6 @@ function App() {
         if (data) {
           const message = 'Вы успешно зарегистрировались.';
           handleLogin({ email, password }, message);
-          // setPopupMessage('Вы успешно зарегистрировались.');
-          // history.push('/signin');
         }
       })
       .catch((err) => {
@@ -391,6 +415,10 @@ function App() {
       });
   };
 
+  const handleSetViewMoviesList = (data) => {
+    setViewMoviesList(data);
+  };
+
   const handleReductOpen = () => {
     setReductOpen(!isReductOpen);
   };
@@ -419,6 +447,10 @@ function App() {
     localStorage.clear();
     setToken('');
     setLoggedIn(false);
+    setMovies([]);
+    setFindedMovies([]);
+    setViewMoviesList([]);
+    setSavedMovies([]);
     history.push('/');
   };
 
@@ -457,6 +489,8 @@ function App() {
               isLoading={isLoading}
               message={message}
               handleSetMessage={handleSetMessage}
+              handleSetViewMoviesList={handleSetViewMoviesList}
+              viewMoviesList={viewMoviesList}
             />
             <Footer />
           </Route>
@@ -493,19 +527,27 @@ function App() {
           </Route>
 
           <Route path='/signin'>
-            <Login
-              handleLogin={handleLogin}
-              resetLoginMessage={resetLoginMessage}
-              loginMessage={loginMessage}
-            />
+            {!loggedIn ? (
+              <Login
+                handleLogin={handleLogin}
+                resetLoginMessage={resetLoginMessage}
+                loginMessage={loginMessage}
+              />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
 
           <Route path='/signup'>
-            <Register
-              handleRegister={handleRegister}
-              registerMessage={registerMessage}
-              resetRegisterMessage={resetRegisterMessage}
-            />
+            {!loggedIn ? (
+              <Register
+                handleRegister={handleRegister}
+                registerMessage={registerMessage}
+                resetRegisterMessage={resetRegisterMessage}
+              />
+            ) : (
+              <Redirect to='/' />
+            )}
           </Route>
 
           <Route path='*'>
