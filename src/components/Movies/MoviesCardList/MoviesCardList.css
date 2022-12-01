@@ -1,4 +1,5 @@
 .cards {
+  position: relative;
   max-width: 1140px;
   margin: 70px auto 10px;
   display: grid;
@@ -6,19 +7,16 @@
   justify-items: center;
   gap: 30px;
 }
-/* @media (max-width: 930px) {
-  .cards{
-    width: 581px;
-    grid-template-columns: repeat(2, 282px);
-  }
+
+.cards__not-found {
+  margin: 0 auto;
+  padding: 0;
+  padding-top: 20px;
+  position: relative;
+  text-align: center;
+  display: block;
+  width: 70%;
 }
-@media (max-width: 620px) {
-  .cards{
-    width: 282px;
-    grid-template-columns: repeat(1, 282px);
-    gap: 20px;
-  }
-} */
 
 @media (max-width: 1160px) {
   .cards {
@@ -31,6 +29,16 @@
 
 @media (max-width: 730px) {
   .cards {
+    grid-template-columns: repeat(1, 342px);
+    gap: 16px;
+    max-width: 342px;
+    margin-top: 40px;
+  }
+
+}
+
+@media (max-width: 400px) {
+  .cards {
     grid-template-columns: repeat(1, 300px);
     gap: 16px;
     max-width: 300px;
@@ -38,3 +46,4 @@
   }
 
 }
+

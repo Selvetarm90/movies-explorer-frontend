@@ -48,6 +48,10 @@
   opacity: .8;
 }
 
+.search-form__button:disabled {
+  cursor: wait
+}
+
 @media (max-width: 800px) {
   .search-form {
     margin-left: 30px;

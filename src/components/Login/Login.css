@@ -1,3 +1,9 @@
 .register__paragraph_login {
-  padding-left: 56px;
+  padding-left: calc((100% - 285px) / 2);
+}
+
+@media (max-width: 500px) {
+  .register__paragraph_login {
+    padding-left: calc((100% - 243px) / 2);
+  }
 }

@@ -6,9 +6,16 @@ export default function Header(props) {
   function HeaderNavigation() {
     if (props.loggedIn) {
       if (props.path) {
-        return <Navigation onNavigate={props.onNavigate} header='white-authorized-header' />;
+        return (
+          <Navigation
+            onNavigate={props.onNavigate}
+            header='white-authorized-header'
+          />
+        );
       }
-      return <Navigation onNavigate={props.onNavigate} header='authorized-header' />;
+      return (
+        <Navigation onNavigate={props.onNavigate} header='authorized-header' />
+      );
     }
     return <Navigation header='no-authorized-header' />;
   }

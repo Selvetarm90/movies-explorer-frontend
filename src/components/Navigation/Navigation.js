@@ -44,7 +44,11 @@ export default function Navigation(props) {
         >
           Аккаунт
         </NavLink>
-        <button type='button' className='navigation__burger navigation__burger_color_white' onClick={props.onNavigate}></button>
+        <button
+          type='button'
+          className='navigation__burger navigation__burger_color_white'
+          onClick={props.onNavigate}
+        ></button>
       </nav>
     );
   }
@@ -72,7 +76,11 @@ export default function Navigation(props) {
         >
           Аккаунт
         </NavLink>
-        <button type='button' className='navigation__burger' onClick={props.onNavigate}></button>
+        <button
+          type='button'
+          className='navigation__burger'
+          onClick={props.onNavigate}
+        ></button>
       </nav>
     );
   }
