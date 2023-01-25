@@ -39,6 +39,10 @@
   outline: none;
 }
 
+.form__input_error {
+  color: #ff3055
+}
+
 .form__input:disabled {
   background-color: #fff;
   color: #000
@@ -63,6 +67,8 @@
   cursor: pointer;
   transition: .3s;
 }
+
+
 
 .profile__button:hover {
   opacity: .7;
@@ -90,8 +96,17 @@
   color: #fff;
 }
 
+
+
 .profile__button-save:hover {
   opacity: .8;
+}
+
+.profile__button-save:disabled {
+  cursor: default;
+  opacity: 1;
+  color: #C2C2C2;
+  background-color: #F8F8F8;
 }
 
 .profile__button-save_unactive {
@@ -107,6 +122,11 @@
   color: #ff004c;
   width: 100%;
   height: 14px;
+  margin-top: 155px;
+}
+
+.profile__error_none {
+  display: none;
 }
 
 .profile__error_none {
@@ -132,10 +152,21 @@
     padding-bottom: 80px;
   }
   .form {
-    margin-bottom: 379px;
+    margin-bottom: 40px;
+  }
+
+  .profile__button {
+    margin-top: 380px;
+  }
+  .profile__button_logout {
+    margin-top: 16px;
+  }
+
+  .profile__button-save {
+    margin-top: 20px;
   }
 
   .profile__error {
-    margin-top: -146px;
+    margin-top: 340px;
   }
 }
