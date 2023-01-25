@@ -30,7 +30,5 @@
 ## Ссылки проекта
 
 Проект доступен по ссылке: https://paramonov.movieexplorer.nomoredomains.sbs/
-
 Использовал открытый API: https://api.nomoreparties.co/
-
 Репозиторий моего бэкенда: https://github.com/Selvetarm90/movies-explorer-api
